@@ -1,0 +1,63 @@
+{% extends 'tienda/base/base.html' %}
+
+{% block content %}
+    
+<!-- Page info -->
+<div class="page-top-info">
+    <div class="container">
+        <h4>PRODUCTOS</h4>
+        <div class="site-pagination">
+            <a href="">{{genero}}</a> /
+            <a href="">{{categoria}}</a>
+        </div>
+    </div>
+</div>
+<section class="top-letest-product-section">
+    <div class="container">
+    <div class="row">
+                
+        {% for prod in productoss %}
+        <div class="col-sm-3">
+            <div class="card  m-3" style="width: 18rem;">
+                {% for img in prod.image_set.all %}
+                                
+                    {% if img.image %}
+                        {% if forloop.first %}
+                            <img src="{{img.image.url}}" class="card-img-top"alt="" height="300px">
+                        {% endif %}
+                    {% endif %}
+                                                                    
+                {% endfor %}
+                
+                <div class="card-body">
+                    <h5 class="card-title">{{prod.title}}</h5>
+                    <hr>
+                    
+                    <ul class="list-group list-group-flush">
+                        <h6>Colores:</h6>
+                        {% for c in prod.variant_set.all %}
+                            <li class="list-group-item"><i class="fas fa-brush"></i> {{c.color}}</li>
+                        {% endfor %}
+                        
+                        <li class="list-group-item">
+                         ${{prod.precio_venta}}
+                        </li>                    
+                    </ul>
+                </div>
+                <div class="card-body">
+                    <div class="pi-links">
+                        <a href="{% url 'tienda:producto_detalle' prod.pk %}" class="btn btn-primary"><i class="flaticon-heart"></i>Ver producto</a>
+                    </div>
+                </div>
+            </div>
+        </div>        
+        {% endfor %}
+    </div>    
+    
+    </div>    
+</section>
+<!-- letest product section end -->
+
+        
+{% endblock content %}
+    

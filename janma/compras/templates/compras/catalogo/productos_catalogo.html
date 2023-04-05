@@ -1,0 +1,53 @@
+{% extends 'administracion/base/base.html' %}
+{% load static %}
+
+{% block content %}
+    
+<h1>Productos de catálogo: <br> {{catalogo}}</h1>
+<div class="card">
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Cód producto</th>
+                            <th>Título</th>
+                            <th>Descripción</th>
+                            <th>Talle</th>
+                            <th>Precio x menor</th>
+                            <th>Precio x mayor</th>
+                            <th>Cant mínima</th>
+                            
+                        </tr>
+                    </thead>                
+                    <tbody>
+                        
+                        
+                        {% for p in productos  %}
+                            <tr>
+                                <td>{{p.id}}</td>
+                                <td>{{p.codigo_producto}}</td>
+                                <td>{{p.titulo}}</td>
+                                <td>{{p.descripcion}}</td>
+                                <td>{{p.talle}}</td>
+                                <td>{{p.precio_menor}}</td>
+                                <td>{{p.precio_mayor}}</td>
+                                <td>{{p.cant_minima}}</td>
+                            </tr>
+                            
+                        {% endfor %}
+                                   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+   
+</div>
+{% endblock content %}

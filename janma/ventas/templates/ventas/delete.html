@@ -1,0 +1,19 @@
+<div class="modal-dialog" role="document">
+    <div class="modal-content">   
+        <div class="modal-body">
+            <h4>¿Está seguro de eliminar la venta?</h4>
+            <p>Fecha y hora: <strong>{{id_venta.fecha}}</strong></p>
+            <p>Cliente:
+              
+              {% if id_venta.cliente %}
+                <b>{{id_venta.cliente}}</b>
+              {% else %}
+                <b>Consumidor final</b>
+              {% endif %}
+                
+            </p>
+            <p>Monto: <b>{{id_venta.total}}</b></p>
+            <p>Forma de pago: <b>{{id_venta.medio_pago}}</b></p>
+        </div>      
+    </div>
+  </div>

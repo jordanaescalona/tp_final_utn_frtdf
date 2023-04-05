@@ -1,0 +1,41 @@
+{% extends 'administracion/base/base.html' %}
+
+
+{% block content %}
+    
+<h2>Datos de perfil</h2>
+<hr>
+<form method="POST">
+    {% csrf_token %}
+    <div class="form-group">
+        <label for="last_login">Último ingreso</label>
+        {{form.last_login}}
+    </div>
+    <div class="form-group">
+        <label for="username">Usuario</label>
+        {{form.username}}
+    </div>
+    <div class="form-group">
+        <label for="date_joined">Fecha de creación</label>
+        {{form.date_joined}}
+    </div>
+    <div class="form-group">
+        <label for="first_name">Nombre</label>
+        {{form.first_name}}
+    </div>
+    <div class="form-group">
+        <label for="last_name">Apellido</label>
+        {{form.last_name}}
+    </div>
+    <div class="form-group">
+        <label for="email">Correo electrónico</label>
+        {{form.email}}
+    </div>
+    
+    <hr>  
+        <button type="submit" class="btn btn-primary" >Guardar cambios</button>
+    
+
+</form>
+{% endblock content %}
+    

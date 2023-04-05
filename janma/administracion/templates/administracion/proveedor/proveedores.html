@@ -1,0 +1,166 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Listado de proveedores</h1>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a href="{% url 'administracion:proveedor_new' %}" class="m-0 font-weight-bold text-primary"><i class="fas fa-plus-square"></i> Agregar nuevo proveedor</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" data-order='[[ 0, "desc" ]]' width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Teléfono</th>
+                            <th>Dirección</th>
+                            <th>CP</th>
+                            <th>Email</th>
+                            <th>Activo</th>
+                            <th class="all">Opciones</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+
+                    {% for item in object_list  %}
+                        <tr>
+                            <td>{{item.id}}</td>
+                            <td>{{item.nombre}}</td>
+                            <td>{{item.telefono}}</td>
+                            <td>{{item.direccion}}</td>
+                            <td>{{item.cp}}</td>
+                            <td>
+                                
+                                {% if item.email %}
+                                    {{item.email}}
+                                {% else %}
+                                    ---------
+                                {% endif %}
+                                                            
+                            </td>
+                            <td>{{item.activo|yesno:"Si,No"}}</td>
+                            <td>
+                                
+                                        <a href="{% url 'administracion:proveedor_edit' item.pk %}" class="btn btn-warning btn-circle" role="button" title="Ver información completa/Editar"> 
+                                            <i class="far fa-edit"></i> 
+                                        </a>
+                                        <button type="button" onclick="eliminar('{{item.pk}}')" class="btn btn-danger btn-circle m-1" role="button" title="Eliminar"> 
+                                            <i class="far fa-trash-alt"></i> 
+                                        </button>
+                                        <br>
+                                        <a  href="{% url 'administracion:proveedor_pdf' item.pk %}" target="_blank" class="btn btn-info btn-circle" role="button" title="Pdf">
+                                            <i class="far fa-file-pdf"></i>
+                                        </a>
+                                        <button type="button" onclick="estado('{{item.pk}}')" title="Cambiar estado" class="btn btn-success btn-circle m-1" role="button">
+                                            E
+                                        </button>
+                            </td>
+
+                        </tr>
+                    {% endfor %}   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    
+
+{% block js %}
+    
+    <script>
+        function eliminar(pk){  
+            $.confirm({
+                theme:"modern",
+                type:'red',
+                title: "Eliminar Proveedor",
+                content: 'url:/administracion/proveedor/delete/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Eliminar",
+                        btnClass:"btn btn-danger",
+                        action: function(){
+                                                        
+                            var data = {"pk":pk};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/administracion/proveedor/delete/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+        function estado(pk){
+            $.confirm({
+                theme:"modern",
+                type:'green',
+                title: "Cambiar estado",
+                content: 'url:/administracion/proveedor/cambiar_estado/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Modificar",
+                        btnClass:"btn btn-success",
+                        action: function(){
+                            
+                            
+                            var estado = this.$content.find('#id_activo')
+                            
+                            var data = {"pk":pk,"estado":estado.val()};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/administracion/proveedor/cambiar_estado/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+    </script>
+{% endblock js %}
+    

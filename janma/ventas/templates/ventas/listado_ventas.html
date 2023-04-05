@@ -1,0 +1,192 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Listado de ventas</h1>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" data-order='[[ 0, "desc" ]]' id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Cliente</th>
+                            <th>Teléfono</th>
+                            <th>Email</th>
+                            <th>Monto</th>
+                            <th>Forma de pago</th>
+                            <th>Estado</th>
+                            <th class="all">Opciones</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+
+                    {% for item in listado_ventas  %}
+                        <tr>
+                            <td>{{item.id}}</td>
+                            <td>{{item.fecha}}</td>
+                            <td>
+                                
+                                {% if item.cliente %}
+                                    {{item.cliente}}
+                                {% else %}
+                                    Consumidor final
+                                {% endif %}
+                                    
+                            </td>
+                            <td>
+                                
+                                {% if item.cliente %}
+                                    {{item.cliente.telefono}}
+                                
+                                {% else %}
+                                    ------
+                                {% endif %}                                    
+                                
+                            </td>
+                            <td>
+                                
+                                {% if item.cliente %}
+                                    
+                                    {% if item.cliente.email %}
+                                        {{item.cliente.email}}
+                                    {% else %}
+                                        ------
+                                    {% endif %}                                     
+                                    
+                                {% else %}
+                                    ------
+                                {% endif %}
+                                    
+                            </td>
+                            <td>${{item.total}}</td>
+                            <td>{{item.medio_pago}}</td>
+                            <td>{{item.estado}}</td>
+                            <td>
+                                
+                                        <a href="#" class="btn btn-warning btn-circle my-1" role="button" title="Ver información completa"> 
+                                            <i class="far fa-edit"></i> 
+                                        </a>
+                                        <button type="button" onclick="eliminar('{{item.pk}}')" class="btn btn-danger btn-circle my-1" role="button" title="Eliminar"> 
+                                            <i class="far fa-trash-alt"></i> 
+                                        </button>
+                                        <br>
+                                        <a  href="{% url 'ventas:pdf' item.pk %}" target="_blank" class="btn btn-info btn-circle my-1" role="button" title="Pdf">
+                                            <i class="far fa-file-pdf"></i>
+                                        </a>
+                                        <a href="#" class="btn btn-success btn-circle" title="Enviar pedido por correo">
+                                            <i class="fas fa-at" ></i>
+                                        </a>
+                                       
+                            </td>
+
+                        </tr>
+                    {% endfor %}   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    
+
+{% block js %}
+    
+    <script>
+        function eliminar(pk){  
+            $.confirm({
+                theme:"modern",
+                type:'red',
+                title: "Eliminar Venta",
+                content: 'url:/ventas/eliminar/venta/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Eliminar",
+                        btnClass:"btn btn-danger",
+                        action: function(){
+                                                        
+                            var data = {"pk":pk};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/ventas/eliminar/venta/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+        function estado(pk){
+            $.confirm({
+                theme:"modern",
+                type:'green',
+                title: "Cambiar estado",
+                content: 'url:/administracion/proveedor/cambiar_estado/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Modificar",
+                        btnClass:"btn btn-success",
+                        action: function(){
+                            
+                            
+                            var estado = this.$content.find('#id_activo')
+                            
+                            var data = {"pk":pk,"estado":estado.val()};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/administracion/proveedor/cambiar_estado/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+    </script>
+{% endblock js %}
+    

@@ -1,0 +1,77 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">CONFIRMACIÓN DE VENTA</h6>
+        {% include 'ventas/breadcrumb.html' %}
+    </div>
+    <div class="card-body">
+        
+        <form action="" method="post">
+            {% csrf_token %}
+            <table class="table table-striped">
+                <thead>
+                  <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Cód.Producto</th>
+                    <th scope="col">Imagen</th>
+                    <th scope="col">Descripción</th>
+                    <th scope="col">Cant.</th>
+                    <th scope="col">Subtotal</th>
+                  </tr>
+                </thead>
+                <tbody>
+                {% for v in venta %}
+                  
+                <tr>
+                    <th scope="row">
+                        
+                            {{v.variant.product.id}}
+                        
+                    </th>
+                    <td>                        
+                        {% if v.variant.product.codigo_barras %}
+                            {{v.variant.product.codigo_barras}}
+                        {% else %}
+                          ----
+                        {% endif %}  
+                    </td>                          
+                    <td>
+                        
+                        {% for img in v.variant.product.image_set.all %}
+                            
+                            {% if forloop.first %}
+                            
+                                <img src="{{img.image.url}}" alt="" width="100px" height="100px">
+                            
+                            {% endif %}                               
+                            
+                        {% endfor %}
+                            
+                    </td>
+                    <td>{{v.variant.product.title}}</td>
+                    <td>
+                        {{v.cantidad}}
+                    </td>
+                    <td>${{v.precio_total}}</td>
+                  </tr>
+                  
+                {% endfor %}
+                <tr class="bg-gradient-secondary text-white">
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>TOTAL</td>
+                    <td>${{venta.venta_total_price}}</td>
+                  </tr>               
+                </tbody>
+              </table>
+            
+            <button type="submit" class="btn btn-primary">Siguiente</button>
+        </form>
+    </div>
+</div>
+{% endblock content %}

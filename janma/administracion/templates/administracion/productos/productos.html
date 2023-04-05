@@ -1,0 +1,190 @@
+{% extends 'administracion/base/base.html' %}
+
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a href="{% url 'administracion:producto_new' %}" class="m-0 font-weight-bold text-primary"><i class="fas fa-plus-square"></i> Agregar nuevo producto</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" data-order='[[ 0, "desc" ]]' width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>Genero</th>
+                            <th>Categoría</th>
+                            <th>Color</th>
+                            <th>Talle</th>
+                            <th>Cód.Barras</th>
+                            <th>Stock</th>
+                            <th>Disponible</th>
+                            <th class="all">Opciones</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+
+                    {% for item in object_list  %}
+                        <tr>
+                            
+                            
+                            <td>
+                                
+                                  {{item.categoria}}
+                                
+                                    
+                            </td>
+                            
+                                
+                            
+                            
+                            <td>{{item.categoria}}</td>
+                            <td>color:{{item.producto.color}}</td>
+                            <td>{{item.get_talle_display}}</td>
+                            <td>
+                                
+                                {% if item.codigo_barras %}
+                                    {{item.codigo_barras}}
+                                {% else %}
+                                    ---------
+                                {% endif %}
+                                                            
+                            </td>
+                            <td>{{item.stock}}</td>
+                            
+                            <td>{{item.disponible|yesno:"Si,No"}}</td>
+                            <td>
+                                
+                                        <a href="{% url 'administracion:producto_update' item.id %}" class="btn btn-warning btn-circle" role="button" title="Editar"> 
+                                            <i class="far fa-edit"></i> 
+                                        </a>
+                                        <button type="button" onclick="eliminar('{{item.slug}}')" class="btn btn-danger btn-circle m-1" role="button" title="Eliminar"> 
+                                            <i class="far fa-trash-alt"></i> 
+                                        </button>
+                                        <br>
+                                        <a  href="#" target="_blank" class="btn btn-info btn-circle" role="button" title="Pdf">
+                                            <i class="far fa-file-pdf"></i>
+                                        </a>
+                                        <button type="button" onclick="estado('{{item.slug}}')" title="Cambiar estado" class="btn btn-success btn-circle m-1" role="button">
+                                            E
+                                        </button>
+                            </td>
+
+                        </tr>
+                    {% endfor %}   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="card">
+        <div class="card-header card-header-secondary">
+            <h4 class="card-title">Products</h4>
+            <a href="{% url 'administracion:producto_new' %}">Add more products</a>
+        </div>
+        <ul>
+            {% for product in object_list %}
+                <li class="card-body">{{ product.titulo }} | <a href="{% url 'administracion:producto_update' product.id %}">Edit</a></li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock content %}
+    
+
+{% block js %}
+    
+    <script>
+        function eliminar(slug){  
+            $.confirm({
+                theme:"modern",
+                type:'red',
+                title: "Eliminar Producto",
+                content: 'url:/administracion/producto/delete/' + slug,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Eliminar",
+                        btnClass:"btn btn-danger",
+                        action: function(){
+                                                        
+                            var data = {"slug":slug};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/administracion/producto/delete/' + slug,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+        function estado(slug){
+            $.confirm({
+                theme:"modern",
+                type:'green',
+                title: "Cambiar estado",
+                content: 'url:/administracion/producto/cambiar_estado/' +slug,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Modificar",
+                        btnClass:"btn btn-success",
+                        action: function(){
+                            
+                            
+                            var estado = this.$content.find('#id_disponible')
+                            
+                            var data = {"slug":slug,"estado":estado.val()};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/administracion/producto/cambiar_estado/' + slug,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+    </script>
+{% endblock js %}
+    

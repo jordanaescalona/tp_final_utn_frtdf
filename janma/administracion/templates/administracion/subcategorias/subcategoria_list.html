@@ -1,0 +1,91 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+   <!-- Page Heading -->
+   <h1 class="h3 mb-2 text-gray-800">Listado de subcategorías</h1>
+    
+   <!-- DataTales Example -->
+   <div class="card shadow mb-4">
+       <div class="card-header py-3">
+           <a href="{% url 'administracion:subcategoria_new' %}" class="m-0 font-weight-bold text-primary"><i class="fas fa-plus-square"></i> Agregar nueva subcategoría</a>
+       </div>
+       <div class="card-body">
+           <div class="table-responsive"> 
+                <table class="table table-striped table-hover table-borderer" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <th>Id</th>
+                        <th>Nombre</th>
+                        <th>Estado</th>
+                        <th class="all">Acciones</th>
+                    </thead>
+                    <tbody>
+                        {% for item in object_list  %}
+                            <tr>
+                                <td>{{ item.id }}</td>
+                                <td>{{item.categoria}}:{{ item.nombre }}</td>
+                                <td>{{ item.activo|yesno:"Activo, Inactivo" }}</td>                            
+                                <td>
+                                    <a href="{% url 'administracion:subcategoria_edit' item.pk %}" class="btn btn-warning btn-circle" role="button" title="Editar"> <i class="far fa-edit"></i> </a>
+                                    <button type="button" onclick="eliminar('{{item.pk}}')" class="btn btn-danger btn-circle" role="button" title="Eliminar"> <i class="far fa-trash-alt"></i> </a>
+                                </td>
+                            </tr>
+                        {% endfor %}                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+<div class="modal fade" id="popup" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true"></div>
+
+{% endblock content %}
+
+
+
+{% block js %}
+    <script>
+        function eliminar(pk){  
+            $.confirm({
+                theme:"modern",
+                type:'red',
+                title: "Eliminar categoría",
+                content: 'url:/administracion/subcategoria/delete/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Eliminar",
+                        btnClass:"btn btn-danger",
+                        action: function(){
+                                                        
+                            var data = {"pk":pk};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/administracion/subcategoria/delete/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+    </script>
+{% endblock js %}
+    

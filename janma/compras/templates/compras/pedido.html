@@ -1,0 +1,261 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+    <form method="POST" id="frmCompras">
+        {% csrf_token %}        
+        <div class="col-xl-12 col-md-12 mb-12">            
+            <div class="card border-left-warning shadow h-100 py-2">       
+                <div class="card-body container-fluid">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
+                                Generar orden de pedido
+                            </div>                                
+                            <div class="table-responsive">
+                                <table class="table">
+                                    <tr>
+                                        <td colspan="6">                                                
+                                            <label for="">ID de pedido:</label>    
+                                            <input type="text" name="enc_id" id="enc_id" readonly class="form-control">
+                                        </td>
+                                    </tr>
+                                    <tr>                                            
+                                        <td colspan="2">
+                                            <label for="">Catálogo:</label>
+                                            <select name="id_catalogo" id="id_catalogo" class="form-control" width="100%">
+                                                
+                                                {% if enc.catalogo %}
+                                                    <option value="{{enc.catalogo.id}}" selected>{{enc.catalogo}}</option>
+                                                {% else %}
+                                                    <option value="0" selected>----Selecciones catálogo---</option>                                                    
+                                                    {% for catalogo in catalogos %}
+                                                        <option value="{{catalogo.id}}" class="form-control">{{catalogo}}</option>
+                                                    {% endfor %}
+                                                {% endif %}
+                                                    
+                                                                                                        
+                                            </select>
+                                        </td>
+                                        <td colspan="4">
+                                            <label for="">Proveedor:</label>
+                                            
+                                            {% if enc.catalogo %}
+                                            <p class="form-control">{{enc.catalogo.proveedor.nombre}}</p> 
+                                            {% else %}
+                                                <p id="txtProveedor" class="form-control"></p> 
+                                            {% endif %}
+                                                
+                                                                                               
+                                        </td>
+                                        <td>
+                                            <label for="fecha">Fecha:</label>
+                                            <input type="text" name="fecha" id="fecha" value="{{enc.fecha}}" readonly class="form-control">
+                                        </td>                                            
+                                    </tr>
+                                    <tr>                                            
+                                        <td>
+                                            <div class="py-4">
+                                                <button type="button" class="btn btn-success btn-circle" id="btnBuscar" onclick="listarProductos(('{{catalogo.pk}}'))" title="Buscar producto">
+                                                    <i class="fas fa-search"></i>                                                        
+                                                </button>
+                                            </div>                                                
+                                        </td>
+                                        <td>
+                                            <label for="codigo">Cód. Producto:</label>
+                                            <input type="text" name="codigo" id="codigo" value="" readonly class="form-control"> 
+                                        </td>
+                                        <td colspan="4">
+                                            <label for="nombre">Nombre producto:</label>
+                                            <input type="text" name="nombre" id="descripcion" value="" readonly class="form-control input-sm">
+                                        </td>
+                                        <td>
+                                            <label for="cant">Cantidad:</label>
+                                            <input type="number" name="cant" id="cant" value="" min="0" class="form-control">    
+                                        </td>
+                                        <td>
+                                            <div class="py-4">
+                                                <button type="submit" class="btn btn-primary btn-circle"id="btnGuardar" name="btnGuardar" title="Agregar producto a detalle de pedido">
+                                                    <i class="fas fa-plus-square"></i>
+                                                </button>
+                                            </div>                                                
+                                        </td>
+                                    </tr>                                          
+                                </table>
+                            </div>
+                                                    
+                            <!-- Inicio Detalle -->
+                            <div class="row">
+                                <div class="col">
+                                    <table class="table table-striped table-hover dt-responsive nowrap" style="width:100%">
+                                        <thead>
+                                            <th>Cód.Producto</th>
+                                            <th>Descripción</th>         
+                                            <th>Cantidad</th>
+                                            <th>Precio</th>
+                                            <th>Sub Total</th>
+                                            
+                                            <th class="all">Acciones</th>
+                                        </thead>
+                                        <tbody>
+                                            
+                                            {% for d in det %}                                                                                                
+                                            <tr>
+
+                                                <td>{{d.producto.codigo_producto}}</td>
+                                                <td>{{d.producto}}</td>
+                                                <td>{{d.cantidad}}</td>
+                                                <td>
+                                                    
+                                                    {% if d.cantidad >= d.producto.cant_minima %}
+                                                        {{d.producto.precio_mayor}}    
+                                                    {% else %}
+                                                        {{d.producto.precio_menor}}
+                                                    {% endif %}
+                                                        
+                                                </td>
+                                                <td>{{d.total}}</td>
+                                                
+                                                <td>
+                                                    <button type="button" class="btn btn-danger btn-circle" onclick="eliminar('{{d.pk}}')"><i class="fas fa-trash-alt"></i></button>
+                                                </td>
+                                            </tr>
+                                            {% endfor %}                                                
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                            <!-- Fin Detalle -->
+                        </div>
+                    </div>
+                    <div class="justify-content-end">
+                        <h2 class="float-right">Total:$<input type="text" class="text-right px-2" id="total" name="total" disabled width="150px"></h2>
+                    </div>                        
+                </div>
+                <a href="{% url 'compras:listado_pedidos' %}" class="btn btn-success">Finalizar pedido</a>                
+            </div>            
+        </div>        
+        
+    </form>
+    
+{% endblock %}
+
+{% block js %}
+<script>
+    
+    let proveedores = [];
+    const listarProveedores = async (catalogoId) => {
+        try {
+                const response = await fetch(`./../proveedor/AJAX/${catalogoId}`);
+                const data = await response.json();
+                console.log(data);
+                let proveedor = ``;
+                if (data.message === "success") {
+                    proveedores = data.proveedores;
+                    proveedores.forEach( (p) => {
+                        proveedor = p.nombre
+                    });
+                    
+                    txtProveedor.innerText = proveedor
+                    
+                    
+                    
+                } else {
+                   
+                    txtProveedor.innerText = ""
+                }
+
+            } catch (error) {
+                console.log(error);
+            }
+
+        };
+        const cargaInicial = async() => {
+            
+            await listarProveedores();
+            id_catalogo.addEventListener("change",(event) =>{
+                      
+            listarProveedores(event.target.value)  
+                         
+            });
+        };
+        window.addEventListener("load", async () => {
+            await cargaInicial();
+        });
+
+   
+       
+    function listarProductos(pk){
+        
+        if($("#id_catalogo").val()==="0"){
+                mensaje("Catálogo no seleccionado","red");
+                    return false;
+        }else{
+            
+            
+            $.dialog({
+                title: 'Buscar productos',
+                content: 'url:/compras/catalogo/seleccionar_producto/3',
+                animation: 'scale',
+                type: 'purple',
+                columnClass: 'col-md-12',
+                containerFluid: true,
+                closeAnimation: 'scale',
+                backgroundDismiss: true,
+                
+            });
+                    
+
+        }
+    }
+    
+    $(function(){
+        $('#enc_id').val("{{enc.id}}");
+        $('#total').val("{{enc.total}}");
+    });
+            
+    function eliminar(pk){  
+        $.confirm({
+            theme:"modern",
+            type:'red',
+            title: "Eliminar producto de pedido",
+            content: 'url:/compras/pedido/detalle/delete/' + pk,
+            onContentReady: function () {
+                var self = this;
+                
+            },
+            buttons:{
+                borrar:{
+                    text:"Eliminar",
+                    btnClass:"btn btn-danger",
+                    action: function(){
+                        var pedido = $('#enc_id').val();
+
+                        var data = {"pk":pk};
+                        console.log(data);
+                        var token = '{{csrf_token}}';
+                        $.ajax({
+                            headers: { "X-CSRFToken": token },
+                            type:"POST",
+                            data:data,
+                            url: '/compras/pedido/detalle/delete/' + pk,
+                            success: function(r){
+                                console.log(r);
+                                if(r==="ok"){
+                                    location.reload(true);
+                                }else{
+                                    mensaje(r,'red');
+                                }
+                            },
+                            error: function(a,b,c){
+                                mensaje(c);
+                            }
+                        });
+                    }
+                    },
+                cancelar: function(){}
+                }
+        });
+    }      
+</script>
+{% endblock js %}
+    

@@ -1,0 +1,156 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF</title>
+    
+    <style type="text/css"> 
+    
+        @page{
+            size:a4 portrait;
+            margin: 2cm;
+            
+        }
+        
+        *{
+            font-family: Arial;
+            font-size:15px;
+
+        }
+       
+        h1{
+            font-size: 40px;
+        }
+        h2{
+            font-size: 25px;
+            color:lightseagreen;
+        }
+        p{
+            font-size: 20px;
+        }
+        a{
+            font-size:30px;
+        }
+        
+        .center{
+            text-align: center;
+        }
+        .derecha{
+            text-align:right ;
+            margin-top: 50px;
+            padding: 0px;
+        }
+        
+        .imagen{
+            height: 150px;
+        }
+        .ubicacion{
+            margin-left: 0%;
+            padding-left: 0%;
+            
+        } 
+             
+    </style>
+        
+    </head>
+    <body>
+        
+       
+        
+        
+       
+        <table>
+            <tr>
+                <td colspan="3">
+                    <h2>ORDEN DE COMPRA</h2>
+                </td>
+                <td colspan="3" align="right">
+                    Fecha: {{pedido.fecha_pedido}}.
+                    
+                </td>
+            </tr>
+            <tr>
+                <td colspan="3"></td>
+                <td colspan="3" align="right">N°pedido: {{pedido.id}}.</td>
+                
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td colspan="3"><h3>DATOS DEL PROVEEDOR</h3></td>
+                <td colspan="3"><h3>DATOS DEL CLIENTE</h3></td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>Nombre o razón social:</b> {{proveedor.nombre}}.</td>
+                <td colspan="3"><b>Nombre o razón social:</b> {{tienda.razon_social}}.</td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>Dirección:</b> {{proveedor.direccion}} <br><b>CP {{proveedor.cp}}.</b></td>
+                <td colspan="3"><b>Dirección:</b> {{tienda.direccion}} {{tienda.ciudad}} {{tienda.provincia}} <br><b>CP {{tienda.cp}}.</b></td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>Teléfono:</b> {{proveedor.telefono}}.</td>
+                <td colspan="3"><b>Teléfono:</b> {{tienda.telefono}}.</td>
+            </tr>
+            <tr>
+                <td colspan="3"><b>Correo electrónico:</b> {{proveedor.email}}</td>
+                <td colspan="3"><b>Correo electrónico:</b> {{tienda.email}}</td>
+            </tr>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td colspan="6" align="center"><h3>DETALLE DE COMPRA</h3></td>
+            </tr>
+            <tr></tr>
+            <thead>
+                <tr>
+                    
+                    <th align="left">Código</th>
+                    <th colspan="2" align="left">Descripción</th>
+                    <th align="left">Cant.</th>
+                    <th align="left">Precio Unit.</th>
+                    <th align="left">Subtotal</th>
+                </tr>
+            </thead>
+            <tbody>
+                
+                {% for d in detalle %}
+                    <tr align="left">
+                        <td>{{d.producto.codigo_producto}}</td>
+                        <td colspan="2">{{d.producto.titulo}}</td>
+                        <td>{{d.cantidad}}</td>
+                        <td>
+                            {% if d.cantidad >= d.producto.cant_minima %}
+                                ${{d.producto.precio_mayor}}
+                            {% else %}
+                                ${{d.producto.precio_menor}}
+                            {% endif %}
+                        </td>
+                        <td>
+                            ${{d.total}}
+                        </td>
+                    </tr>
+                {% endfor %}  
+            </tbody>
+            <tr></tr>
+            <tr></tr>
+            <tr>
+                <td colspan="5"><h3>Total pedido</h3></td>
+                <td><h3>${{pedido.total}}</h3></td>
+            </tr>
+            <tr>
+                <td colspan="5"><h3>Gastos de envío</h3></td>
+                <td><h3>${{pedido.envio}}</h3></td>
+            </tr>
+            <tr>
+                <td colspan="5"><h2>TOTAL A PAGAR</h2></td>
+                <td><h2>${{pedido.pagar}}</h2></td>
+            </tr>
+        </table>
+
+    
+    </body>
+    </html>

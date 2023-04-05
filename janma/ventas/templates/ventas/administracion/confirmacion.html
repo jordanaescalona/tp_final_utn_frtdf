@@ -1,0 +1,50 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h6 class="m-0 font-weight-bold text-primary">CONFIRMACIÓN DE VENTA</h6>
+        {% include 'ventas/breadcrumb.html' %}
+    </div>
+    <div class="card-body">
+        
+        {% if datos_venta.medio_pago == 'EFECTIVO' %}
+            <h4><strong>La venta se realizo de forma exitosa</strong></h4><br>
+            <h5>Monto de la transacción: <strong>${{datos_venta.total}}</strong></h5>
+            <h5>Forma de pago: <strong>EFECTIVO</strong></h5>
+            
+            {% if datos_venta.cliente == None %}
+                <h5><strong>Consumidor final</strong></h5>
+            {% else %}
+                <h5>Nombre del cliente: <strong>{{datos_venta.cliente}}</strong></h5>
+            {% endif %}
+                
+            <br>
+            
+            <a href="{% url 'ventas:ventas' %}" class="btn btn-primary btn-lg btn-block">Finalizar</a>
+        {% else %}
+            <h1>Iniciar transacción con mercado pago</h1>
+            <h5>Monto de la transacción: <strong>${{datos_venta.total}}</strong></h5> 
+            <h5>Forma de pago: <strong>{{datos_venta.medio_pago}}</strong></h5>
+            <div id="wallet_container"></div>
+            
+        {% endif %}          
+        
+    </div>
+{% endblock %}
+
+{% block js %}
+<script src="https://sdk.mercadopago.com/js/v2"></script>
+<script>
+    const mp = new MercadoPago('TEST-bd5aaa2b-c9aa-43b5-8af2-219fd1c3a199');
+    const bricksBuilder = mp.bricks();
+    mp.bricks().create("wallet", "wallet_container", {
+    initialization: {
+        preferenceId: '{{preference.id}}',
+    },
+    });
+</script>
+
+{% endblock js %}
+    

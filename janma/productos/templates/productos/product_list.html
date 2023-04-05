@@ -1,0 +1,199 @@
+{% extends "administracion/base/base.html" %}
+
+
+{% block content %}
+    <h1>Productos</h1>
+    <div class="card">
+        
+        <div class="card shadow mb-4">
+            <div class="card-header py-3">
+                <a href="{%  url 'products:create_product' %}" class="m-0 font-weight-bold text-primary"><i class="fas fa-plus-square"></i> Agregar nuevo producto</a>
+            </div>
+            <div class="card-body">
+                <div class="table-responsive">
+                    <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                        <thead>
+                            <tr>
+                                <th>ID</th>
+                                <th>Título</th>
+                                <th>Categoría</th>
+                                <th>Colores</th>
+                                <th>Talle</th>
+                                <th>Stock</th>
+                                <th>Cód.Barras</th>
+                                <th>Género</th>
+                                <th>Disponible</th>
+                                <th class="all">Opciones</th>
+                            </tr>
+                        </thead>                
+                        <tbody>
+                            
+                            
+                            {% for product in products  %}
+                                <tr>
+                                    <td>{{product.id}}</td>
+                                    <td>{{product.title}}</td>
+                                    <td>{{product.categoria}}</td>
+                                    <td>
+                                        
+                                        {% for c in product.variant_set.all %}
+                                            {{c.color}} <br>
+                                            
+                                        {% endfor %}
+                                            
+                                    </td>
+
+                                    <td>
+                                        
+                                        {% for t in product.variant_set.all  %}
+                                            {{t.get_talle_display}} <br>
+                                            
+                                        {% endfor %}
+                                            
+                                    </td>
+                                    
+                                    <td>
+                                        
+                                        {% for s in product.variant_set.all  %}
+                                            {{s.stock}} <br>
+                                                                                        
+                                        {% endfor %}
+                                            
+                                    </td>
+                                    <td>
+                                        
+                                        {% if product.codigo_barras %}
+                                            {{product.codigo_barras}}
+                                        {% else %}
+                                            ------------
+                                        {% endif %}
+                                            
+                                        
+                                    </td>
+                                    <td>
+                                        {{product.genero}}
+                                    </td>
+                                    <td>
+                                        {{product.disponible|yesno:"Si,No"}}
+                                    </td>
+                                    <td>
+                                        <a href="{% url 'products:update_product' product.id %}" class="btn btn-warning btn-circle" role="button" title="Editar"> 
+                                            <i class="far fa-edit"></i> 
+                                        </a>
+                                        <button type="button" onclick="eliminar('{{product.pk}}')" class="btn btn-danger btn-circle m-1" role="button" title="Eliminar"> 
+                                            <i class="far fa-trash-alt"></i> 
+                                        </button>
+                                        <br>
+                                        <!-- <a  href="#" target="_blank" class="btn btn-info btn-circle" role="button" title="Pdf">
+                                            <i class="far fa-file-pdf"></i>
+                                        </a> -->
+                                        <button type="button" onclick="estado('{{product.pk}}')" title="Cambiar estado" class="btn btn-success btn-circle m-1" role="button">
+                                            E
+                                        </button>
+                                    </td>
+                                </tr>
+                                
+                            {% endfor %}
+                                       
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+       
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+    
+    <script>
+        function eliminar(pk){  
+            $.confirm({
+                theme:"modern",
+                type:'red',
+                title: "Eliminar Producto",
+                content: 'url:/productos/administracion/delete-product/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Eliminar",
+                        btnClass:"btn btn-danger",
+                        action: function(){
+                                                        
+                            var data = {"pk":pk};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/productos/administracion/delete-product/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+        function estado(pk){
+            $.confirm({
+                theme:"modern",
+                type:'green',
+                title: "Cambiar estado",
+                content: 'url:/productos/update/estado/' +pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Modificar",
+                        btnClass:"btn btn-success",
+                        action: function(){
+                            
+                            
+                            var estado = this.$content.find('#id_disponible')
+                            
+                            var data = {"pk":pk,"estado":estado.val()};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/productos/update/estado/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+    </script>
+{% endblock js %}

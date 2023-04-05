@@ -1,0 +1,48 @@
+{% extends 'tienda/base/base.html' %}
+
+
+{% block content %}
+    
+
+<div class="container p-5">
+    <h4>({{count}}) Resultado/s para: <span class="text-danger">{{query}}</span></h4>
+              
+    <div class="row">
+        {% for object in queryset %}
+          <div class="col-3 mt-5">
+            
+               <!-- Product -->
+        <div class="card h-100">
+            {% for img in object.image_set.all %}
+                    
+                    {% if  img.image %}
+                   
+                        {% if forloop.first %}
+                            <img src="{{ img.image.url }}" alt="Imagen del producto" height="300">
+                        {% endif %}  
+                    {% endif %}
+                       
+            {% endfor %}
+            
+            <div class="card-body">
+            <h5 class="card-title">{{ object.title }}</h5>
+            <p>{{object.headline | safe}}</p>
+            
+            <h6 >Colores:
+                {% for color in object.variant_set.all  %}
+                    {{color.color}} <br>
+                {% endfor %}
+            </h6>
+            
+            <br>
+            <p class="card-text">{{ object.descripcion | truncatewords:15 }}</p>
+            <a href="{% url 'tienda:producto_detalle' object.pk %}" class="btn btn-primary">Ver más detalle</a>
+            </div>
+        
+        </div>
+    </div>
+    {% endfor %}
+  </div>       
+</div>
+{% endblock content %}
+    

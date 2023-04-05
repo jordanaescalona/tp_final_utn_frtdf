@@ -1,0 +1,108 @@
+{% extends 'tienda/base/base.html' %}
+
+
+{% block content %}
+    
+<!-- Page info -->
+<div class="page-top-info">
+    <div class="container">
+        <h4>Tu carrito</h4>
+        <div class="site-pagination">
+            <a href="{% url 'tienda:index' %}">Home</a> /
+            <a href="">Carrito</a>
+        </div>
+    </div>
+</div>
+<!-- Page info end -->
+
+
+<!-- cart section end -->
+<section class="cart-section spad">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-9">
+                <div class="cart-table">
+                    <h3>Tu carrito</h3>       
+                    <div class="cart-table-warp">
+                        <table>
+                            <thead>
+                                <tr>
+                                    <th class="product-th">Producto</th>
+                                    <th class="quy-th">Color</th>
+                                    <th class="quy-th">Cantidad</th>
+                                    <th class="size-th">Talle</th>
+                                    <th class="size-th">Precio</th>
+                                    <th class="size-th">Subtotal</th>
+                                    <th class="total-th"></th>
+                                    
+                                </tr>
+                            </thead>
+                            <tbody>     
+                            
+                            {% for c in cart %}                            
+                            {% with product=c.variant  %}
+                                <form action="" method="get">                     
+                                <tr>
+                                    <td class="product-col">
+                                        
+                                        {% for img in product.product.image_set.all %}
+                                            
+                                            {% if forloop.first %}
+                                                <img src="{{img.image.url}}" alt="">
+                                            {% endif %}
+                                                
+                                        {% endfor %}
+                                    </td> 
+                                    <td>
+                                        <div class="text-wrap text-sm p-1">
+                                            
+                                            {{product.color}}
+                                            
+                                        </div>                                        
+                                    </td>                                                                          
+                                    <td class="quy-col">
+                                        <div class="quantity">                                            
+                                            {{c.cantidad}}                                            
+                                        </div>
+                                    </td>
+                                    <td class="size-col"><h4>{{product.talle}}</h4></td>
+                                    <td class="size-col"><h4>${{c.precio}}</h4></td>
+                                    <td class="size-col"><h4>${{c.precio_total}}</h4></td>
+                                    <td class="total-col">
+                                        <input id="variantId" name="variantId" type="hidden" value="{{product.id}}">
+                                        <a href="{% url 'cart:eliminar_producto' product.id %}" class="btn btn-danger btn-circle m-1" role="button" title="Eliminar producto/s del carrito"> 
+                                            <i class="far fa-trash-alt"></i> 
+                                        </a>
+                                        
+                                    </td>
+                                    </form>
+                                </tr>
+                            {% endwith %}
+                            {% endfor %}                         
+                            </tbody>
+                        </table>
+                    </div>
+                    <div class="total-cost">
+                        
+                        <h6>Total <span></span><span>${{cart.cart_total_price}}</span></h6>
+                            
+                    </div>
+                </div>
+                
+            </div>
+            
+            {% if cart %}              
+
+                <div class="col-lg-3 card-right">
+                    
+                    <a href="" class="site-btn">Finalizar compra</a>
+                    <a href="{% url 'cart:vaciar' %}" class="site-btn sb-dark">Vaciar carrito</a>
+                </div>
+            {% endif %}
+            
+        </div>
+    </div>
+</section>
+<!-- cart section end -->    
+{% endblock content %}
+    

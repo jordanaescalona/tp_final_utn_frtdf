@@ -1,0 +1,100 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+	<title>Janma | Tienda de ropa online</title>
+	<meta charset="UTF-8">
+	<meta name="description" content=" Janma | Tienda de ropa online">
+	<meta name="keywords" content="janma, venta, ropa, online">
+	<meta name="viewport" content="width=device-width, initial-scale=1.0">
+	<!-- Favicon -->
+	<link href="{% static 'tienda/img/favicon.ico' %}" rel="shortcut icon"/>
+
+	<!-- Google Font -->
+	<link href="https://fonts.googleapis.com/css?family=Josefin+Sans:300,300i,400,400i,700,700i" rel="stylesheet">
+
+	<link href="{% static 'administracion/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+
+	<!-- Stylesheets -->
+	<link rel="stylesheet" href="{% static 'tienda/css/bootstrap.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'tienda/css/font-awesome.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'tienda/css/flaticon.css' %}"/>
+	<link rel="stylesheet" href="{% static 'tienda/css/slicknav.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'tienda/css/jquery-ui.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'tienda/css/owl.carousel.min.css' %}"/>
+	<link rel="stylesheet" href="{% static 'tienda/css/animate.css' %}"/>
+	<link rel="stylesheet" href="{% static 'tienda/css/style.css' %}"/>
+
+	<!-- jquery-confirm -->
+    <link rel="stylesheet" href="{% static 'pluggins/jquery-confirm/jquery-confirm.min.css' %}">
+
+	<!--[if lt IE 9]>
+		  <script src="https://oss.maxcdn.com/html5shiv/3.7.2/html5shiv.min.js"></script>
+	  <script src="https://oss.maxcdn.com/respond/1.4.2/respond.min.js"></script>
+	<![endif]-->
+	<!-- DateTimePicker -->
+	<link rel="stylesheet" href="{% static 'pluggins/datetimepicker/jquery.datetimepicker.min.css' %}">
+</head>
+<body>
+	<!-- Pagina Preloder -->
+	<div id="preloder">
+		<div class="loader"></div>
+	</div>
+
+	<!-- Header section -->
+	<header class="header-section">
+		{% include 'tienda/base/header_top.html' %}
+		{% include 'tienda/base/menu_navegacion.html' %}
+	</header>
+	<!-- Header section end -->
+
+	
+	{% block content %}
+		
+	{% endblock content %}
+		
+
+
+	{% include 'tienda/base/footer.html' %}
+
+
+	<!--====== Javascripts & Jquery ======-->
+	<script src="{% static 'tienda/js/jquery-3.2.1.min.js' %}"></script>
+	<script src="{% static 'tienda/js/bootstrap.min.js' %}"></script>
+	<script src="{% static 'tienda/js/jquery.slicknav.min.js' %}"></script>
+	<script src="{% static 'tienda/js/owl.carousel.min.js' %}"></script>
+	<script src="{% static 'tienda/js/jquery.nicescroll.min.js' %}"></script>
+	<script src="{% static 'tienda/js/jquery.zoom.min.js' %}"></script>
+	<script src="{% static 'tienda/js/jquery-ui.min.js' %}"></script>
+	<script src="{% static 'tienda/js/main.js' %}"></script>
+	 <!-- Jquery confirm -->
+	 <script src="{% static 'pluggins/jquery-confirm/jquery-confirm.min.js' %}"></script>
+	 <!-- DateTimePicker -->
+	 <script src="{% static 'pluggins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>
+	 <script>
+        function mensaje(msg,color='green'){
+            $.alert({
+                title: '',
+                theme: 'material',
+                type: color,
+                content: msg,
+            });
+        }
+        {% if messages %}
+            {% for message in messages %}
+                mensaje("{{message}}");
+                console.log(mensaje);
+            {% endfor %}
+        {% endif %}
+
+        $(document).ready(function () {  
+			  jQuery.datetimepicker.setLocale('es');  
+		});  
+    </script>
+	
+	{% block js %}
+		
+	{% endblock js %}
+		
+	</body>
+</html>

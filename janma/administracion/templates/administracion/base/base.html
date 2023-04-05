@@ -1,0 +1,194 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <!-- Custom fonts for this template-->
+    <link href="{% static 'administracion/vendor/fontawesome-free/css/all.min.css' %}" rel="stylesheet" type="text/css">
+    <link
+        href="https://fonts.googleapis.com/css?family=Nunito:200,200i,300,300i,400,400i,600,600i,700,700i,800,800i,900,900i"
+        rel="stylesheet">
+
+    <!-- Custom styles for this template-->
+    <link href="{% static 'administracion/css/sb-admin-2.min.css' %}" rel="stylesheet">
+
+    <!-- Custom styles for this page -->
+    <link href="{% static 'administracion/vendor/datatables/dataTables.bootstrap4.min.css' %}" rel="stylesheet">
+
+    <!-- jquery-confirm -->
+    <link rel="stylesheet" href="{% static 'pluggins/jquery-confirm/jquery-confirm.min.css' %}">
+
+    <!-- dataTable -->
+        
+    <link rel="stylesheet" href="{% static 'pluggins/bootstrap-table/bootstrap-table.min.css' %}">
+
+    <!-- DateTimePicker -->
+    <link rel="stylesheet" href="{% static 'pluggins/datetimepicker/jquery.datetimepicker.min.css' %}">
+    
+    {% block css %}
+        
+    {% endblock css %}
+        
+    <title>Administración Janma</title>
+</head>
+<body id="page-top">
+    
+    <!-- Page Wrapper -->
+    <div id="wrapper">
+
+        {% include 'administracion/base/menu_lateral.html' %}
+
+        <!-- Content Wrapper -->
+        <div id="content-wrapper" class="d-flex flex-column">
+
+            <!-- Main Content -->
+            <div id="content">
+
+                {% include 'administracion/base/menu_superior.html' %}
+
+                <!-- Begin Page Content -->
+                <div class="container-fluid">
+                    
+                
+                        
+                    
+                    {% block content %}
+                        
+                    {% endblock content %}
+                        
+
+                </div>
+                <!-- /.container-fluid -->
+
+            </div>
+            <!-- End of Main Content -->
+
+            <!-- Footer -->
+            <footer class="sticky-footer bg-white">
+                <div class="container my-auto">
+                    <div class="copyright text-center my-auto">
+                        <p class="text-gray-800 text-center mt-5">Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos los derechos reservados | Página de <i class="fa fa-heart-o" aria-hidden="true"></i> <a href="#" target="_blank">Jordana Escalona</a></p>
+                    </div>
+                </div>
+            </footer>
+            
+            <!-- End of Footer -->
+
+        </div>
+        <!-- End of Content Wrapper -->
+
+    </div>
+    <!-- End of Page Wrapper -->
+
+    <!-- Scroll to Top Button-->
+    <a class="scroll-to-top rounded" href="#page-top">
+        <i class="fas fa-angle-up"></i>
+    </a>
+
+    <!-- Logout Modal-->
+    <div class="modal fade" id="logoutModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel"
+        aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Ready to Leave?</h5>
+                    <button class="close" type="button" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">×</span>
+                    </button>
+                </div>
+                <div class="modal-body">Select "Logout" below if you are ready to end your current session.</div>
+                <div class="modal-footer">
+                    <button class="btn btn-secondary" type="button" data-dismiss="modal">Cancel</button>
+                    <a class="btn btn-primary" href="login.html">Logout</a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal fade" id="popup"></div>
+    
+    
+    <!-- Bootstrap core JavaScript-->
+    <script src="{% static 'administracion/vendor/jquery/jquery.min.js' %}"></script>
+    <script src="{% static 'administracion/vendor/bootstrap/js/bootstrap.bundle.min.js' %}"></script>
+
+    <!-- Core plugin JavaScript-->
+    <script src="{% static 'administracion/vendor/jquery-easing/jquery.easing.min.js' %}"></script>
+
+    <!-- Custom scripts for all pages-->
+    <script src="{% static 'administracion/js/sb-admin-2.min.js' %}"></script>
+
+    <!-- Jquery confirm -->
+    <script src="{% static 'pluggins/jquery-confirm/jquery-confirm.min.js' %}"></script>
+
+    <!-- Page level plugins -->
+    <script src="{% static 'administracion/vendor/datatables/jquery.dataTables.min.js' %}"></script>
+    <script src="{% static 'administracion/vendor/datatables/dataTables.bootstrap4.min.js' %}"></script>
+    <!-- DateTimePicker -->
+    <script src="{% static 'pluggins/datetimepicker/jquery.datetimepicker.full.min.js' %}"></script>
+    <!-- Bootstrap table -->
+    <script src="{% static 'pluggins/bootstrap-table/bootstrap-table.min.js' %}"></script>
+    <script>
+    function abrir_modal(url){
+        $("#popup").load(url, function(){
+            $(this).modal({
+                backdrop:'static',
+                keyboard: false
+            })
+            $(this).modal('show');
+        });
+            return false;
+    }
+
+    function cerrar_modal()
+    {
+      $('#popup').modal('hide');
+      return false;
+    }
+
+        function mensaje(msg,color='green'){
+            $.alert({
+                title: '',
+                theme: 'material',
+                type: color,
+                content: msg,
+            });
+        }
+        {% if messages %}
+            {% for message in messages %}
+                mensaje("{{message}}");
+                console.log(mensaje);
+            {% endfor %}
+        {% endif %}
+
+        $(document).ready(function() {
+            $('#dataTable').DataTable({
+                language: {
+                    "decimal": ",",
+                    "thousands": ".",
+                    "lengthMenu": "Mostrar _MENU_ registros",
+                    "zeroRecords": "No se encontraron resultados",
+                    "info": "Mostrando registros del _START_ al _END_ de un total de _TOTAL_ registros",
+                    "infoEmpty": "Mostrando registros del 0 al 0 de un total de 0 registros",
+                    "infoFiltered": "(filtrado de un total de _MAX_ registros)",
+                    "sSearch": "Buscar:",
+                    "oPaginate": {
+                        "sFirst": "Primero",
+                        "sLast":"Último",
+                        "sNext":"Siguiente",
+                        "sPrevious": "Anterior"
+                    },
+                    "sProcessing":"Cargando..."
+                }});
+            
+        });
+    </script>
+    
+    {% block js %}
+        
+    {% endblock js %}
+        
+</body>
+</html>

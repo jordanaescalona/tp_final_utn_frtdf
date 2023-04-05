@@ -1,0 +1,65 @@
+<nav class="main-navbar">
+    <div class="container">
+        <!-- menu -->
+        <ul class="main-menu">
+            <li><a href="{% url 'tienda:index' %}">Home</a></li>
+
+        {% if productos %}           
+        
+            {% if categorias_mujeres %}
+            
+                <li><a href="#">Mujer</a>
+                    {% for c in productos %}
+                    
+                        {% if c.genero == 'MUJER' %}
+                            <ul class="sub-menu">
+                            
+                                {% for m in categorias_mujeres %}
+                                    <li><a href="{% url 'tienda:producto_categoria_genero' 'MUJER' m %}">{{m}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </li>    
+            {% endif %}
+            {% if categorias_unisex %}
+            
+                <li><a href="#">Unisex</a>
+                    {% for c in productos %}
+                    
+                        {% if c.genero == 'UNISEX' %}
+                            <ul class="sub-menu">
+                            
+                                {% for u in categorias_unisex %}
+                                    <li><a href="{% url 'tienda:producto_categoria_genero' 'UNISEX' u %}">{{u}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </li>    
+            {% endif %}
+            {% if categorias_hombres %}
+            
+                <li><a href="#">Hombres</a>
+                    {% for c in productos %}
+                    
+                        {% if c.genero == 'HOMBRE' %}
+                            <ul class="sub-menu">
+                            
+                                {% for h in categorias_hombres %}
+                                    <li><a href="{% url 'tienda:producto_categoria_genero' 'HOMBRE' h %}">{{h}}</a></li>
+                                {% endfor %}
+                            </ul>
+                        {% endif %}
+                    
+                    {% endfor %}
+                </li>    
+            {% endif %}        
+        {% endif %}
+
+            <li><a href="#">Contacto</a></li>
+        </ul>
+    </div>
+</nav>

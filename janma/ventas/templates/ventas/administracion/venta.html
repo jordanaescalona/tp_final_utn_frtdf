@@ -1,0 +1,133 @@
+{% extends 'administracion/base/base.html' %}
+   
+{% block content %}
+<!-- Orden de compra -->
+<div class="container">
+    <h1 class="h3 mb-4 text-gray-800">DETALLE DE VENTA</h1>
+    
+    {% if venta %}
+        <a href="{% url 'ventas:vaciar_detalle' %}" class="btn btn-danger btn-icon-split my-2">
+            <span class="icon text-white-50"><i class="fas fa-trash"></i></span>
+            <span class="text">Vaciar detalle de venta</span>
+        </a>
+    {% endif %}        
+    
+    <br>
+    <div class="card shadow mb-4 border-left-primary">
+        <div class="card-header py-3">
+            <h6 class="m-0 font-weight-bold text-primary">
+                <a href="{% url 'administracion:index' %}">
+                    <i class="fas fa-search fa-sm"></i>
+                    Buscar productos
+                </a>
+            </h6>
+        </div>
+        <div class="card-body">
+            <div class="col-xs-12 col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>#id</th>
+                            <th>Producto</th>
+                            <th>Color</th>
+                            <th>Talle</th>
+                            <th>Cantidad</th>
+                            <th>Precio</th>
+                            <th>Subtotal</th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+
+                        
+                        {% for v in venta %}
+                            
+                        <tr>
+                            <td>{{v.variant.product.id}}</td>
+                            <td>
+                                
+                                {% for img in v.variant.product.image_set.all %}
+                                    {% if forloop.first %}
+                                    
+                                    <a href="{% url 'ventas:detalle_producto' v.variant.id v.cantidad %}" title="Ver detalle">
+                                        <img src="{{img.image.url}}" alt="" width="100px" height="100px">
+                                    </a>
+                                    {% endif %}
+                                {% endfor %}
+                                    
+                            </td>
+                            <td>{{v.variant.color}}</td>
+                            <td>{{v.variant.talle}}</td>
+                            <td>{{v.cantidad}}</td>
+                            <td>${{v.variant.product.precio_venta}}</td>
+                            <td>${{v.precio_total}}</td>
+                            <td>
+                                <a href="{% url 'ventas:eliminar_productos' v.variant.pk %}" class="btn btn-danger btn-circle btn-lg" title="Eliminar producto/s">
+                                    <i class="fas fa-trash"></i>
+                                </a>
+                            </td>
+                        </tr>
+                        {% endfor %}                       
+                        
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    
+   
+    <!-- Begin Page Content -->
+    <div class="container-fluid">
+
+        <div class="row">
+
+            <!-- Earnings (Monthly) Card Example -->
+            <div class="col-xl-6 col-md-12 mb-4">
+                <div class="card border-left-success shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <div class="text-xs font-weight-bold text-success text-uppercase text-lg mb-1">
+                                   TOTAL A PAGAR
+                                </div>
+                                   
+                                
+                            </div>
+                            <div class="col-auto">
+                                <div class="h5 mb-0 font-weight-bold text-gray-800 text-lg">
+                                    
+                                    <h1><i class="fas fa-dollar-sign text-gray-800"></i>{{venta.venta_total_price}}</h1>
+                                </div>
+                                
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Earnings (Annual) Card Example -->
+            <div class="col-xl-6 col-md-12 mb-4">
+                <div class="card border-left-success shadow h-100 py-2 bg-gradient-primary">
+                    <div class="card-body ">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                
+                                <div class="h5 mb-0 font-weight-bold text-gray-100 text-lg">FINALIZAR COMPRA</div>
+                            </div>
+                            <div class="col-auto btn-lg">
+                                <a href="{% url 'ventas:confirmar_venta' %}">
+                                    <i class="fas fa-chevron-circle-right fa-2x text-gray-300"></i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+        </div>
+
+    </div>
+    <!-- /.container-fluid -->
+</div>    
+{% endblock content %}
+    

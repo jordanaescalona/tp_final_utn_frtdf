@@ -1,0 +1,110 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Listado de Clientes</h1>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a href="{% url 'users:new_cliente' %}" class="m-0 font-weight-bold text-primary"><i class="fas fa-plus-square"></i> Agregar nuevo cliente</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" data-order='[[ 0, "desc" ]]' id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Nombre</th>
+                            <th>Apellido</th>
+                            <th>Fecha Nacimiento</th>
+                            <th>Telefono</th>
+                            <th>Email</th>
+                            
+                            <th class="all">Opciones</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+
+                    {% for item in object_list  %}
+                        <tr>
+                            <td>{{item.id}}</td>
+                            <td>{{item.first_name}}</td>
+                            <td>{{item.last_name}}</td>
+                            <td>{{item.fecha_nacimiento}}</td>
+                            <td>{{item.telefono}}</td>
+                            <td>                                
+                                {% if item.email %}
+                                    {{item.email}}
+                                {% else %}
+                                    ------
+                                {% endif %}                              
+                            </td>
+                           
+                            <td>
+                                
+                                        <a href="{% url 'users:update_cliente' item.pk %}" class="btn btn-warning btn-circle" role="button" title="Ver información completa/Editar"> 
+                                            <i class="far fa-edit"></i> 
+                                        </a>
+                                        <button type="button" onclick="eliminar('{{item.pk}}')" class="btn btn-danger btn-circle m-1" role="button" title="Eliminar"> 
+                                            <i class="far fa-trash-alt"></i> 
+                                        </button>                                        
+                            </td>
+                        </tr>
+                    {% endfor %}   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+{% endblock content %}
+
+{% block js %}
+<script>
+    function eliminar(pk){  
+        $.confirm({
+            theme:"modern",
+            type:'red',
+            title: "Eliminar Cliente",
+            content: 'url:/usuarios/administracion/cliente/delete/' + pk,
+            onContentReady: function () {
+                var self = this;
+                
+            },
+            buttons:{
+                borrar:{
+                    text:"Eliminar",
+                    btnClass:"btn btn-danger",
+                    action: function(){
+                                                    
+                        var data = {"pk":pk};
+                        console.log(data);
+                        var token = '{{csrf_token}}';
+                        $.ajax({
+                            headers: { "X-CSRFToken": token },
+                            type:"POST",
+                            data:data,
+                            url: '/usuarios/administracion/cliente/delete/' + pk,
+                            success: function(r){
+                                console.log(r);
+                                if(r==="ok"){
+                                    location.reload(true);
+                                }else{
+                                    mensaje(r,'red');
+                                }
+                            },
+                            error: function(a,b,c){
+                                mensaje(c);
+                            }
+                        });
+                    }
+                    },
+                cancelar: function(){}
+                }
+        });
+    }
+</script>
+{% endblock js %}
+    
+    

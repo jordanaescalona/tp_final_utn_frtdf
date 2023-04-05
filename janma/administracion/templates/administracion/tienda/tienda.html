@@ -1,0 +1,18 @@
+{% extends 'administracion/base/base.html' %}
+
+
+{% block content %}
+<h3>{{title}}</h3>
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+        {{form.as_p}}
+    </div>
+    
+    <hr>  
+    <button type="submit" class="btn btn-primary" >Guardar</button>
+    <a href="{% url 'administracion:tienda_datos' %}" class="btn btn-success">Volver</a>
+  </form>
+{% endblock content %}
+    

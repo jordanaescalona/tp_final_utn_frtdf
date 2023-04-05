@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Hola {{proveedor}}!</h1>
+    <p>Hemos realizado un pedido de los siguientes productos:</p>
+
+    <table style="border: 1px solid black;">
+        <thead>
+            <th>Codigo producto</th>
+            <th>Cantidad</th>
+            <th>Descripcion</th>
+            <th>Precio x menor</th>
+            <th>Precio x mayor</th>
+            <th>Cant.mínima</th>
+            <th>Sub total</th>
+        </thead>
+        <tbody>
+            {% for det in detalle %}
+            <tr>
+                <td style="border: 1px solid black;">{{det.producto.codigo_producto}}</td>
+                <td style="border: 1px solid black;">{{det.cantidad}}</td>
+                <td style="border: 1px solid black;">{{det.producto.titulo}}</td>
+                <td style="border: 1px solid black;">{{det.producto.precio_menor}}</td>
+                <td style="border: 1px solid black;">{{det.producto.precio_mayor}}</td>
+                <td style="border: 1px solid black;">{{det.producto.cant_minima}}</td>
+                <td style="border: 1px solid black;">{{det.total}}</td>
+            </tr>
+            {% endfor %}
+            <tr>
+                <td>
+                    <h1>Total: ${{pedido.total}}</h1>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+
+    <h4>Datos de contacto</h4>
+    <h5>Razón social: {{tienda.razon_social}}</h5>
+    <h5>Dirección: {{tienda.direccion}} - {{tienda.ciudad}} - {{tienda.provincia}} - {{tienda.pais}}</h5>
+    <h5>Código postal: {{tienda.cp}}</h5>
+    <h5>Teléfono de contacto: {{tienda.telefono}}</h5>
+    <h5>Correo electrónico: {{tienda.email}}</h5>
+
+
+</body>
+</html>

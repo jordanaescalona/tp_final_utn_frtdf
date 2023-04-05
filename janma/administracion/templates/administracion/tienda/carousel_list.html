@@ -1,0 +1,152 @@
+{% extends 'administracion/base/base.html' %}
+
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">{{title}}</h1>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a href="{% url 'administracion:carousel_new' %}" class="m-0 font-weight-bold text-primary"><i class="fas fa-plus-square"></i> Agregar nuevo contenido</a>
+        </div>
+                    
+        <div class="card-body">
+            <div class="table-responsive-lg">
+                <table class="table table-bordered" data-order='[[ 0, "desc" ]]' id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                          <th scope="col">Título</th>
+                          <th scope="col">Subtítulo</th>
+                          <th scope="col">Contenido</th>
+                          <th scope="col">Imagen</th>
+                          <th scope="col">Acciones</th>
+                        </tr>
+                      </thead>
+                      <tbody>
+                        {% for obj in object_list %}
+                        <tr>
+                          
+                          <td>{{obj.titulo}}</td>
+                          <td>{{obj.subtitulo}}</td>
+                          <td>{{obj.contenido}}</td>
+                          <td>
+                            {% if obj.imagen %}
+                            <img src="{{obj.imagen.url}}" width="250px" alt="">
+                            {% endif %}
+                          </td>                            
+                          <td align="center"><br>
+                            <a href="{% url 'administracion:carousel_update' obj.pk %}" class="btn btn-warning btn-circle" role="button">
+                              <i class="fas fa-edit fa-lg"  title="Editar"></i>
+                            </a>
+                            <button type="button" onclick="eliminar('{{obj.pk}}')" class="btn btn-danger btn-circle m-1">
+                              <i class="fas fa-trash fa-lg" title="Eliminar"></i> 
+                            </button>
+                            
+                          </td>
+                        </tr>
+                        {% endfor %}
+                          
+                      </tbody>
+                    
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    
+
+{% block js %}
+    
+    <script>
+        function eliminar(pk){  
+            $.confirm({
+                theme:"modern",
+                type:'red',
+                title: "Eliminar contenido carousel",
+                content: 'url:/administracion/tienda/carousel/delete/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Eliminar",
+                        btnClass:"btn btn-danger",
+                        action: function(){
+                                                        
+                            var data = {"pk":pk};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/administracion/tienda/carousel/delete/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+        function estado(pk){
+            $.confirm({
+                theme:"modern",
+                type:'green',
+                title: "Cambiar estado",
+                content: 'url:/administracion/proveedor/cambiar_estado/' + pk,
+                onContentReady: function () {
+                    var self = this;
+                    
+                },
+                buttons:{
+                    borrar:{
+                        text:"Modificar",
+                        btnClass:"btn btn-success",
+                        action: function(){
+                            
+                            
+                            var estado = this.$content.find('#id_activo')
+                            
+                            var data = {"pk":pk,"estado":estado.val()};
+                            console.log(data);
+                            var token = '{{csrf_token}}';
+                            $.ajax({
+                                headers: { "X-CSRFToken": token },
+                                type:"POST",
+                                data:data,
+                                url: '/administracion/proveedor/cambiar_estado/' + pk,
+                                success: function(r){
+                                    console.log(r);
+                                    if(r==="ok"){
+                                        location.reload(true);
+                                    }else{
+                                        mensaje(r,'red');
+                                    }
+                                },
+                                error: function(a,b,c){
+                                    mensaje(c);
+                                }
+                            });
+                        }
+                        },
+                    cancelar: function(){}
+                    }
+            });
+        }
+    </script>
+{% endblock js %}
+        

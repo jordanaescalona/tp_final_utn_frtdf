@@ -1,0 +1,98 @@
+{% extends 'administracion/base/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<div class="card shadow mb-4">
+    <div class="card-header py-3">
+        <h1 class="h3 mb-2 text-gray-800">Detalle de producto</h1>
+    </div>
+
+    <div class="card-body">
+        <div class="row">
+            <!-- Earnings (Monthly) Card Example -->            
+                       
+            {% for img in product.product.image_set.all %}
+                         
+            <div class="col-xl-3 col-md-6 mb-4">
+                <div class="card border-left-primary shadow h-100 py-2">
+                    <div class="card-body">
+                        <div class="row no-gutters align-items-center">
+                            <div class="col mr-2">
+                                <img src="{{img.image.url}}" alt="" class="shadow h-100" width="100%">                                
+                            </div>                            
+                        </div>
+                    </div>
+                </div>
+            </div>
+            {% endfor %}  
+                     
+        </div>
+        <h4 class="m-0 font-weight-bold text-primary">{{product.product.title}}</h4>
+        <p>{{product.product.descripcion}}</p>
+        <h5>Color: {{product.color}}</h5>
+        <h5>Talle: {{product.talle}}</h5>
+        <h5 class="text-danger">Cantidad disponible: {{product.stock}}</h5>
+        <h5>Precio ${{product.product.precio_venta}}</h5>
+        <hr>
+        <div class="card border-left-warning shadow h-100 py-2">
+            <div class="card-body">
+                <div class="row no-gutters align-items-center">
+                    <div class="col mr-2">
+                        <h6>AGREGAR PRODUCTOS A LA VENTA:</h6>
+
+                        
+                        {% if venta %}
+                            {% for v in venta  %}
+                                {% if v.variant.id == product.id %}
+                                    {% if product.stock > v.cantidad %}
+                                        <h6 class="text-danger">Usted ya posee <strong>{{v.cantidad}}</strong> producto/s en la venta, verifique su stock disponible</h6>
+                                        <form action="" method="GET">
+                                            <input type="number" name="cantidad" id="cantidad" min="1" max="{{cantidad_disponible}}">
+                                            <input type="hidden" name="cantidad_venta1" id="cantidad_venta" value="{{v.cantidad}}">
+                                            
+                                            <button type="submit" class="btn btn-warning">Agregar</button> 
+                                        </form>
+                                    {% else %}
+                                        <h6 class="text-danger">La venta posee el máximo de productos en stock, verifique su detalle de venta</h6>                                        
+                                    {% endif %}
+                                {% else %}
+                                
+                                <form action="" method="GET">
+                                    <input type="number" name="cantidad" id="cantidad" min="1" max="{{cantidad_disponible}}">
+                                    <input type="hidden" name="cantidad_venta1" id="cantidad_venta" value="{{v.cantidad}}">
+                                    
+                                    <button type="submit" class="btn btn-warning">Agregar</button> 
+                                </form> 
+                                {% endif %}  
+                            {% endfor %}
+                        {% else %}
+                        <form action="" method="GET">
+                            <input type="number" name="cantidad" id="cantidad" min="1" max="{{cantidad_disponible}}">
+                            <input type="hidden" name="cantidad_venta2" id="cantidad_venta" value="{{v.cantidad}}">
+                            <button type="submit" class="btn btn-warning">Agregar</button>
+                        </form> 
+                        {% endif %}   
+
+                    </div>                            
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock content %}
+
+
+{% block js %}
+<script>
+   function Pasar(){
+        stock=$("#cantidad_stock").val()
+        cantidad_venta=$('#cantidad_venta').val()
+        disponible = stock - cantidad_venta;
+        $("#cantidad").attr("max",disponible);
+    };
+</scripts>
+{% endblock js %}
+    
+     

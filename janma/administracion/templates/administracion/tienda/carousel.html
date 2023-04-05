@@ -1,0 +1,20 @@
+{% extends 'administracion/base/base.html' %}
+{% load static %}
+{% block content %}
+
+<h2 class="py-2">{{title}}</h2>
+<div class="container">
+    <div class="d-flex justify-content-center">
+        <img src="{% static 'administracion/img/carousel.png' %}" alt="Carousel" width="850px">
+    </div>
+    <br>
+    <form action="" method="post" enctype="multipart/form-data">
+        {% csrf_token %}
+        {{form.as_p}} 
+        <br>
+    <button type="submit" class="btn btn-success">{{boton}}</button>
+    <a href="{% url 'administracion:carousel_list' %}" class="btn btn-primary">Cancelar</a>
+    </form>
+</div> 
+{% endblock content %}
+    

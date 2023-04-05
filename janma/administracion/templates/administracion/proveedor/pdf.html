@@ -1,0 +1,87 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF</title>
+    
+    <style type="text/css"> 
+    
+        @page{
+            size:a4 portrait;
+            margin: 2cm;
+            
+        }
+        
+        *{
+            font-family: Arial;
+            font-size:15px;
+
+        }
+       
+        h1{
+            font-size: 40px;
+        }
+        h2{
+            font-size: 30px;
+            color:lightseagreen;
+        }
+        p{
+            font-size: 20px;
+        }
+        a{
+            font-size:30px;
+        }
+        
+        .center{
+            text-align: center;
+        }
+        .derecha{
+            text-align:right ;
+            margin-top: 50px;
+            padding: 0px;
+        }
+        
+        .imagen{
+            height: 150px;
+        }
+        .ubicacion{
+            margin-left: 0%;
+            padding-left: 0%;
+            
+        } 
+             
+    </style>
+        
+    </head>
+    <body>
+        
+       
+        
+        
+        <h1 class="center">
+            Proveedor <br>
+           "{{proveedor.nombre}}"
+        </h1>
+
+        <h3>Teléfono: {{proveedor.telefono}}</h3>
+        <h4>Direccion: {{proveedor.direccion}}</h4>
+        <h4>Código postal: {{proveedor.cp}}</h4>
+        
+        
+        {% if proveedor.email %}
+            <h5>Correo electrónico: {{proveedor.email}}</h5>
+        {% endif %}
+            
+        {% if proveedor.web %}
+        <h5>Página web: {{proveedor.web}}</h5>
+        {% endif %}
+        {% if proveedor.observaciones %}
+            <h5>Observaciones: </h5>
+            <h6>{{proveedor.observaciones}}</h6>
+        {% endif %}
+    
+    </body>
+    </html>

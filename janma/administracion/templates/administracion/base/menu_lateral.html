@@ -1,0 +1,177 @@
+<!-- Sidebar -->
+<ul class="navbar-nav bg-gradient-dark sidebar sidebar-dark accordion" id="accordionSidebar">
+
+    <!-- Sidebar - Brand -->
+    <a class="sidebar-brand d-flex align-items-center justify-content-center" href="{% url 'administracion:index' %}">
+        <div class="sidebar-brand-icon rotate-n-15">
+            <i class="fas fa-smile"></i>
+        </div>
+        <div class="sidebar-brand-text mx-3">Janma Admin</div>
+    </a>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Nav Item - Dashboard -->
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'administracion:index' %}">
+            
+            <i class="fas fa-cart-plus"></i>
+            <span>Página principal</span></a>
+    </li>
+    <hr class="sidebar-divider">
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'administracion:tienda_datos' %}">
+            
+            <i class="fas fa-fw fa-store"></i>
+            <span>Configuración tienda</span></a>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        MENÚ PRINCIPAL
+    </div>
+
+{% if user.is_superuser %}
+    
+
+    
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseProveedor"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-thumbtack"></i>
+            <span>Proveedores</span>
+        </a>
+        <div id="collapseProveedor" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                
+                <a class="collapse-item" href="{% url 'administracion:proveedor_new' %}">Nuevo</a>
+                <a class="collapse-item" href="{% url 'administracion:proveedor_listado' %}">Listado</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCliente"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-thumbtack"></i>
+            <span>Clientes</span>
+        </a>
+        <div id="collapseCliente" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                
+                <a class="collapse-item" href="{% url 'users:new_cliente' %}">Nuevo</a>
+                <a class="collapse-item" href="{% url 'users:clientes' %}">Listado</a>
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseVenta"
+            aria-expanded="true" aria-controls="collapseTwo">
+            <i class="fas fa-thumbtack"></i>
+            <span>Venta</span>
+        </a>
+        <div id="collapseVenta" class="collapse" aria-labelledby="headingTwo" data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <a class="collapse-item" href="{% url 'ventas:ventas' %}">Listado</a>
+            </div>
+        </div>
+    </li>
+    <!-- Nav Item - Utilities Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapseCatalogo"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-thumbtack"></i>
+            <span>Catálogo de productos</span>
+        </a>
+        <div id="collapseCatalogo" class="collapse" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Catálogo:</h6>
+                <a class="collapse-item" href="{% url 'compras:subir_catalogo' %}">Agregar nuevo</a>
+                <a class="collapse-item" href="{% url 'compras:catalogos' %}">Listado</a>
+                                
+            </div>
+        </div>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapsePedidos"
+            aria-expanded="true" aria-controls="collapseUtilities">
+            <i class="fas fa-thumbtack"></i>
+            <span>Pedidos</span>
+        </a>
+        <div id="collapsePedidos" class="collapse" aria-labelledby="headingUtilities"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                
+                <a class="collapse-item" href="{% url 'compras:nuevo_pedido' %}">Nuevo</a>
+                <a class="collapse-item" href="{% url 'compras:listado_pedidos' %}">Listado</a>
+                <a class="collapse-item" href="{% url 'compras:pedidos_pendientes' %}">Registrar ingreso</a>
+                
+            </div>
+        </div>
+    </li>
+
+    <!-- Divider -->
+    <hr class="sidebar-divider">
+
+    <!-- Heading -->
+    <div class="sidebar-heading">
+        Productos
+    </div>
+
+    <!-- Nav Item - Pages Collapse Menu -->
+    <li class="nav-item">
+        <a class="nav-link" href="#" data-toggle="collapse" data-target="#collapsePages" aria-expanded="true"
+            aria-controls="collapsePages">
+            <i class="fas fa-thumbtack"></i>
+            <span>Categorias</span>
+        </a>
+        <div id="collapsePages" class="collapse" aria-labelledby="headingPages"
+            data-parent="#accordionSidebar">
+            <div class="bg-white py-2 collapse-inner rounded">
+                <h6 class="collapse-header">Categorias</h6>
+                <a class="collapse-item" href="{% url 'administracion:categoria_new' %}">Nueva</a>
+                <a class="collapse-item" href="{% url 'administracion:categorias' %}">Listar</a>
+                
+                <!-- <div class="collapse-divider"></div>
+                <h6 class="collapse-header">Subcategorias</h6>
+                <a class="collapse-item" href="{% url 'administracion:subcategoria_new' %}">Nueva</a>
+                <a class="collapse-item" href="{% url 'administracion:subcategorias' %}">Listar</a>  -->
+            </div>
+        </div>
+    </li>
+
+    <!-- Nav Item - Charts -->
+    <li class="nav-item">
+        <a class="nav-link" href="{%  url 'products:create_product' %}">
+            <i class="fas fa-thumbtack"></i>
+            <span>Cargar producto</span>
+        </a>
+    </li>
+
+    
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'products:list_products' %}">
+            <i class="fas fa-thumbtack"></i>
+            <span>Listado de productos</span></a>
+    </li>
+    <li class="nav-item">
+        <a class="nav-link" href="{% url 'administracion:alerta_stock' %}">
+            <i class="fas fa-thumbtack"></i>
+            <span>Alerta stock</span></a>
+    </li>
+    {% endif %}
+    <!-- Divider -->
+    <hr class="sidebar-divider d-none d-md-block">
+
+    <!-- Sidebar Toggler (Sidebar) -->
+    <div class="text-center d-none d-md-inline">
+        <button class="rounded-circle border-0" id="sidebarToggle"></button>
+    </div>
+
+</ul>
+<!-- End of Sidebar -->

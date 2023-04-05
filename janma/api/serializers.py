@@ -1,0 +1,26 @@
+from rest_framework import serializers
+
+from productos.models import Product,Variant,Image
+from users.models import Cliente
+
+class ProductoSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=Product
+        fields='__all__'
+
+class VariantSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Variant
+        fields = '__all__'
+
+class ImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Image
+        fields = '__all__'
+        
+class ClienteSerializer(serializers.ModelSerializer):
+
+    class Meta:
+        model=Cliente
+        fields='__all__'

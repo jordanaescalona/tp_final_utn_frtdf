@@ -1,0 +1,29 @@
+{% extends 'administracion/base/base.html' %}
+
+
+{% block content %}
+    
+    {% if tienda %}
+        <br>
+        <div class="p-1 mb-1 bg-secondary text-white">
+            <h4>Datos de la Tienda</h4>
+        </div>
+        
+        <br>
+        <a href="{% url 'administracion:tienda_update' tienda.id %}" class="btn btn-primary">Ver o editar datos de la tienda</a>
+    {% else %}
+        <br>
+        <h1>Aún no ha cargado los datos de la tienda</h1>
+        <br>
+        <h2>Desea cargarlos ahora?</h2>
+        <br>
+        <a href="{% url 'administracion:tienda' %}" class="btn btn-primary">Cargar datos de la tienda</a>
+    {% endif %}
+    <hr>
+    <div class="p-1 mb-1 bg-secondary text-white">
+        <h4>Diseño de Carousel</h4>
+    </div>
+    <br>
+    <a href="{% url 'administracion:carousel_list' %}" class="btn btn-success">Ver o editar datos de carousel</a>
+{% endblock content %}
+    

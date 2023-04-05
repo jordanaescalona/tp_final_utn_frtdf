@@ -1,0 +1,61 @@
+{% extends "administracion/base/base.html" %}
+
+
+{% block content %}
+    
+<h1>Stock de productos menor o igual a 3 unidades</h1>
+<div class="card">
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Título</th>
+                            <th>Categoría</th>
+                            <th>Colores</th>
+                            <th>Talle</th>
+                            <th>Stock</th>
+                            <th>Género</th>
+                            
+                            <th class="all">Opciones</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+                        
+                        
+                        {% for v in variants  %}
+                            <tr>
+                                <td>{{v.product.id}}</td>
+                                <td>{{v.product.title}}</td>
+                                <td>{{v.product.categoria}}</td>
+                                <td>{{v.color}}</td>
+                                <td>{{v.talle}}</td>
+                                <td>{{v.stock}}</td>
+                                <td>{{v.product.genero}}</td>
+                                
+                                <td>
+                                    <a href="{% url 'products:update_product' v.product.id %}" class="btn btn-warning btn-circle" role="button" title="Editar"> 
+                                        <i class="far fa-edit"></i> 
+                                    </a>
+                                   
+                                </td>
+                            </tr>
+                            
+                        {% endfor %}
+                                   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+   
+</div>
+
+
+{% endblock content %}

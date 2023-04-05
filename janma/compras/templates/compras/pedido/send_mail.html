@@ -1,0 +1,44 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+    <h2>Hola está a punto de enviar un correo electrónico con la orden de pedido</h2><br>
+    <form  method="post">
+        {% csrf_token %}
+        <h5>Correo destinatario: {{correo}}</h5>
+        <h5>Nombre proveedor: {{proveedor}}</h5> <br><br>
+        <h4 style="font-weight: bold;">Detalle del pedido:</h4>
+        <table >
+            <thead>
+                <th style="border: 1px solid black;">Codigo producto</th>
+                <th style="border: 1px solid black;">Cantidad</th>
+                <th style="border: 1px solid black;">Descripcion</th>
+                <th style="border: 1px solid black;">Precio x menor</th>
+                <th style="border: 1px solid black;">Precio x mayor</th>
+                <th style="border: 1px solid black;">Cant.mínima</th>
+                <th style="border: 1px solid black;">Sub total</th>
+            </thead>
+            <tbody>
+                {% for det in detalle %}
+                <tr>
+                    <td style="border: 1px solid black;">{{det.producto.codigo_producto}}</td>
+                    <td style="border: 1px solid black;">{{det.cantidad}}</td>
+                    <td style="border: 1px solid black;">{{det.producto.titulo}}</td>
+                    <td style="border: 1px solid black;">{{det.producto.precio_menor}}</td>
+                    <td style="border: 1px solid black;">{{det.producto.precio_mayor}}</td>
+                    <td style="border: 1px solid black;">{{det.producto.cant_minima}}</td>
+                    <td style="border: 1px solid black;">{{det.total}}</td>
+                </tr>
+                {% endfor %}
+                <tr>
+                    <td><br>
+                        <h1 style="font-weight: bold;">Total: ${{pedido.total}}</h1>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+        <br><br>
+        <button type="submit" class="btn btn-primary">Enviar correo</button>
+        
+    </form>
+{% endblock content %}
+    

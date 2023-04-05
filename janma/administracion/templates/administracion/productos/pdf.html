@@ -1,0 +1,84 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PDF</title>
+    
+    <style type="text/css"> 
+    
+        @page{
+            size:a4 portrait;
+            margin: 2cm;
+            
+        }
+        
+        *{
+            font-family: Arial;
+            font-size:15px;
+
+        }
+       
+       
+        
+        .center{
+            text-align: center;
+        }
+        .derecha{
+            text-align:right ;
+            margin-top: 50px;
+            padding: 0px;
+        }
+        
+        .imagen{
+            height: 150px;
+        }
+        .ubicacion{
+            margin-left: 0%;
+            padding-left: 0%;
+            
+        } 
+             
+    </style>
+        
+    </head>
+    <body>
+        
+       
+        
+        
+        <h1 class="center"> Producto - Janma Store</h1>
+        <br>    
+        <h4>PROVEEDOR: {{producto.proveedor}}</h4>  
+        <h4>CATEGORÍA: {{producto.categoria}}</h4>
+        <h4>GÉNERO: {{producto.get_genero_display}}</h4>
+        <h4>PRECIO COMPRA: ${{producto.precio_compra}}</h4>
+        <h4>PRECIO VENTA: ${{producto.precio_venta}}</h4>
+        <h4>FECHA INGRESO: {{producto.fecha_compra}}</h4>
+        <h4>FECHA ACTUALIZACIÓN: {{producto.fecha_actualizacion}}</h4>
+        <h4>DESCRIPCIÓN: {{producto.descripcion}}</h4>
+        <h4>OFERTA: {{producto.oferta|yesno:"Si,No"}}</h4>
+        <h4>DISPONIBLE: {{producto.disponible|yesno:"Si,No"}}</h4>
+        <h4>COLOR: {{producto.color}}</h4>
+        <h4>TALLE: {{producto.get_talle_display}}</h4>
+        <h4>STOCK: {{producto.stock}}</h4>
+            
+                       
+        
+         
+        {% if producto.imagen %}
+            
+            {% for i in producto.imagen.all %}
+             
+              
+            <div style="margin-bottom: 10px;">
+                
+                <img src="media/{{i}}" alt="" height="400px">
+            </div>
+            {% endfor %}
+        {% endif %}
+            
+    </body>
+    </html>

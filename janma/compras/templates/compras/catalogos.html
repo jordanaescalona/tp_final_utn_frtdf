@@ -1,0 +1,122 @@
+{% extends 'administracion/base/base.html' %}
+{% load static %}
+
+{% block content %}
+    
+<h1>Catálogos</h1>
+<div class="card">
+    
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a href="{% url 'compras:subir_catalogo' %}" class="m-0 font-weight-bold text-primary"><i class="fas fa-plus-square"></i> Cargar nuevo catálogo</a><br>
+            <a href="{% static 'administracion/plantilla_catalogo.xlsx' %}" download class="btn btn-warning">Descargar plantilla muestra de catálogo</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Proveedor</th>
+                            <th>Nombre archivo</th>
+                            <th>Fecha Carga</th>
+                            <th>Cargado en sistema?</th>
+                            
+                            <th class="all">Opciones</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+                        
+                        
+                        {% for catalogo in object_list  %}
+                            <tr>
+                                <td>{{catalogo.id}}</td>
+                                <td>{{catalogo.proveedor}}</td>
+                                <td>{{catalogo.archivo}}</td>
+                                <td>{{catalogo.fecha_carga}}</td>
+                                <td>
+                                    {{catalogo.activo|yesno:"Si,No"}}
+                                </td>
+                                <td>
+                                    
+                                    {% if not catalogo.activo %}
+                                    <a href="{% url 'compras:importar_productos' catalogo.pk %}" class="btn btn-warning btn-circle" role="button" title="Cargar productos"> 
+                                        <i class="fas fa-upload"></i>
+                                    </a>
+                                    {% else %}
+                                    <a href="{% url 'compras:productos_catalogo' catalogo.id %}" class="btn btn-primary btn-circle" title="Ver productos de catálogo">
+                                        <i class="fab fa-wpforms"></i>
+                                    </a> 
+                                    {% endif %}
+                                                                       
+                                    <button type="button" onclick="eliminar('{{catalogo.pk}}')" class="btn btn-danger btn-circle m-1" role="button" title="Eliminar"> 
+                                        <i class="far fa-trash-alt"></i> 
+                                    </button>
+                                    
+                                    <a  href="{{catalogo.archivo.url}}" download target="_blank" class="btn btn-info btn-circle" role="button" title="Descargar archivo">
+                                        <i class="fas fa-file-download"></i>
+                                    </a>
+                                    <!-- <button type="button" onclick="estado('{{product.pk}}')" title="Cambiar estado" class="btn btn-success btn-circle m-1" role="button">
+                                        E
+                                    </button>  -->
+                                </td>
+                            </tr>
+                            
+                        {% endfor %}
+                                   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+   
+</div>
+{% endblock content %}
+
+{% block js %}
+<script>
+    function eliminar(pk){  
+        $.confirm({
+            theme:"modern",
+            type:'red',
+            title: "Eliminar Catálogo",
+            content: 'url:/compras/catalogo-delete/' + pk,
+            onContentReady: function () {
+                var self = this;
+                
+            },
+            buttons:{
+                borrar:{
+                    text:"Eliminar",
+                    btnClass:"btn btn-danger",
+                    action: function(){
+                                                    
+                        var data = {"pk":pk};
+                        console.log(data);
+                        var token = '{{csrf_token}}';
+                        $.ajax({
+                            headers: { "X-CSRFToken": token },
+                            type:"POST",
+                            data:data,
+                            url: '/compras/catalogo-delete/' + pk,
+                            success: function(r){
+                                console.log(r);
+                                if(r==="ok"){
+                                    location.reload(true);
+                                }else{
+                                    mensaje(r,'red');
+                                }
+                            },
+                            error: function(a,b,c){
+                                mensaje(c);
+                            }
+                        });
+                    }
+                    },
+                cancelar: function(){}
+                }
+        });
+    }
+</script> 
+{% endblock js %}
+    

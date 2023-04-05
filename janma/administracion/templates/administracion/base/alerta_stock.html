@@ -1,0 +1,20 @@
+{% load static %}
+
+<!-- Nav Item - Alerts -->
+<li class="nav-item dropdown no-arrow mx-1">
+    <a class="nav-link " href="{% url 'administracion:alerta_stock' %}" id="alertsDropdown" role="button" title="Productos con poco stock"
+        >
+        <i class="fas fa-bell fa-fw"></i>
+        
+        {% if variants %}
+            
+            {% for v in variants %}
+            <span class="badge badge-danger badge-counter">{{forloop.counter}}+</span> 
+            {% endfor %}               
+            
+        {% endif %}
+      
+    </a>    
+    
+</li>
+

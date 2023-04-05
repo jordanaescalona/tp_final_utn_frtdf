@@ -1,0 +1,91 @@
+<div class="">
+    <div class="">
+        <div class="col-xl-12 col-md-12 mb-1">
+            <div class="">
+                <div class="">
+                    <div class="row no-gutters align-items-center">
+                        <div class="col mr-2">
+                            
+                            <div class="dropdown-divider"></div>
+                            <p>
+                                *La cant.min(Cantidad mínima) hace referencia a la cantidad mínima para compra por mayor.
+                            </p>
+                            <div class="row">
+                                <table
+                                data-toggle="table"
+                                id="tblProducto"
+                                data-pagination="true"
+                                data-search="true"
+                                data-locale="es-AR"
+                                >
+                                    <thead>
+                                        <tr>
+                                            <th data-soportable="true">ID</th>
+                                            <th data-soportable="true">Código</th>
+                                            <th>Producto</th>
+                                            <th>Descripcion</th>
+                                            <th>Talle</th>
+                                            <th>Precio Menor</th>
+                                            <th>Precio Mayor</th>
+                                            <th>Cant.min</th>
+                                            <th class="all">
+                                                Opciones
+                                            </th>
+                                        </tr>
+                                    </thead>                
+                                    <tbody>
+                                                                               
+                                        {% for producto in productos  %}
+                                            <tr>
+                                                <td>{{producto.id}}</td>
+                                                <td>{{producto.codigo_producto}}</td>
+                                                <td>{{producto.titulo}}</td>
+                                                <td>{{producto.descripcion}}</td>
+                                                <td>{{producto.talle}}</td>
+                                                <td>${{producto.precio_menor}}</td>
+                                                <td>${{producto.precio_mayor}}</td>
+                                                <td>{{producto.cant_minima}}</td>
+                                                <td> 
+                                                    <button type="button" class="btn btn-success btn-circle" title="Seleccionar producto" 
+                                                    onclick="seleccionarProducto({{producto.id}},'{{producto.codigo_producto}}','{{producto.descripcion}}')">
+                                                        <i class="fas fa-hand-pointer"></i>
+                                                    </button>
+                                                </td>                                                  
+                                            </tr>
+                                        {% endfor %}
+                                                   
+                                    </tbody>
+                                </table>
+                        </div>
+                    </div>
+                </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+{% block js %}
+    <script>
+        $(function () {
+            $("#btnCancelar").click(function(e){
+                e.preventDefault();
+                cerrar_modal();
+            });
+        });
+
+        $('#tblProducto').bootstrapTable();
+
+        function seleccionarProducto(id,codigo,descripcion){
+        $("#codigo").val(codigo);
+        $("#descripcion").val(descripcion);
+        console.log(id)
+        mensaje("Producto seleccionado","green");
+        $("#codigo").select();
+        $("#codigo").focus();
+
+    }
+    </script>
+{% endblock js %}
+    

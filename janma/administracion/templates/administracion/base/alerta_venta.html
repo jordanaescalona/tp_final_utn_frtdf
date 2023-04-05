@@ -1,0 +1,13 @@
+<li class="nav-item dropdown no-arrow mx-1">
+    <a class="nav-link" href="{% url 'ventas:detalle_venta' %}" id="messagesDropdown" role="button" title="Ver venta">
+        <i class="fas fa-money-check-alt"></i>
+        <!-- Counter - Messages -->
+        {% if venta %}            
+            {% for v in venta %}
+            <span class="badge badge-danger badge-counter">{{forloop.counter}}+</span> 
+            {% endfor %}               
+            
+        {% endif %}
+       
+    </a> 
+</li>

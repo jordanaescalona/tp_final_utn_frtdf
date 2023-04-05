@@ -1,0 +1,27 @@
+{% extends 'administracion/base/base.html' %}
+{% load static %}
+{% block content %}
+
+<div class="card">
+    <div class="card-header card-header-secondary">
+        <h4 class="card-title">Nuevo catálogo</h4><br>
+        <a href="{% static 'administracion/plantilla_catalogo.xlsx' %}" download class="btn btn-warning">Descargar plantilla muestra de catálogo</a>
+    </div>
+    <form method="post" enctype="multipart/form-data" class="card-body">
+        {% csrf_token %}
+        <div class="form-group">
+            <label for="proveedor">Seleccione proveedor:</label>
+            {{form.proveedor}}
+        </div>
+        <div class="form-group">
+            <label for="archivo">Archivo:</label>
+            {{form.archivo}}
+        </div>
+        <br>
+        
+        
+        <button type="submit" class="btn btn-primary">Cargar</button>
+    </form>
+</div>
+{% endblock content %}
+    

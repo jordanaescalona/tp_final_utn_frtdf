@@ -1,0 +1,78 @@
+{% load static %}
+<section class="footer-section">
+    <div class="container">
+        <div class="footer-logo text-center">
+            <a href="#">
+                <!-- <img src="{% static 'tienda/img/logo-light.png' %}" alt=""> -->
+                <h4 class="text-white">JANMA STORE</h4>
+            </a>
+        </div>
+        <div class="row">
+            <div class="col-lg-6 col-sm-6">
+                <div class="footer-widget about-widget">
+                    <h2>Pagos</h2>
+                    <p>Pagos rápidos y seguros</p>
+                    <img src="{% static 'tienda/img/cards.png' %}" alt="">
+                </div>
+            </div>
+            
+            <div class="col-lg-6 col-sm-6">
+                <div class="footer-widget contact-widget">
+                    <h2>Contáctenos</h2>
+                    
+                    {% if tienda %}
+                        <div class="con-info">
+                            <span>Razón Social:</span>
+                            <p>{{tienda.razon_social}}</p>
+                        </div>
+                        <div class="con-info">
+                            <span>Dirección:</span>
+                            <p>{{tienda.direccion}} | {{tienda.ciudad}} | {{tienda.provincia}} | {{tienda.pais}}</p>
+                        </div>
+                        <div class="con-info">
+                            <span>Código Postal:</span>
+                            <p>{{tienda.cp}}</p>
+                        </div>
+                        <div class="con-info">
+                            <span>Teléfono:</span>
+                            <p>+54 {{tienda.telefono}}</p>
+                        </div>
+                        <div class="con-info">
+                            <span>Email:</span>
+                            <p>{{tienda.email}}</p>
+                        </div>
+                    {% endif %}
+                        
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="social-links-warp">
+        <div class="container">
+            <div class="social-links d-flex justify-content-center">
+                
+                {% if tienda %}
+                    
+                    
+                    {% if tienda.instagram %}
+                        <a href="https://www.instagram.com/{{tienda.instagram}}" class="instagram"><i class="fa fa-instagram"></i><span>instagram</span></a>
+                    {% endif %}
+                    
+                    
+                    {% if tienda.facebook %}
+                        <a href="https://www.facebook.com/{{tienda.facebook}}" class="facebook"><i class="fa fa-facebook"></i><span>facebook</span></a>
+                    {% endif %}
+                        
+                {% endif %}
+
+            </div>
+
+
+<p class="text-white text-center mt-5">Copyright &copy;<script>document.write(new Date().getFullYear());</script> Todos los derechos reservados | Página de <i class="fa fa-heart-o" aria-hidden="true"></i> <a href="#" target="_blank">Jordana Escalona</a></p>
+
+
+        </div>
+    </div>
+</section>
+<!-- Footer section end -->

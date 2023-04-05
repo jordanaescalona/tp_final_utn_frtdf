@@ -1,0 +1,53 @@
+{% load static %}
+<div class="header-top">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-2 text-center text-lg-left">
+                <!-- logo -->
+                <a href="#" class="site-logo">
+                    <!-- <img src="{% static 'tienda/img/logo.png' %}" alt=""> -->
+                    <h4>JANMA STORE</h4>
+                </a>
+            </div>
+            
+            <div class="col-xl-6 col-lg-5">
+                <form class="header-search-form" action="{% url 'tienda:buscador2' %}">
+                    <input type="text" name="query" value="{{query}}" placeholder="Buscar en Janma ....">
+                    <button type="submit"><i class="flaticon-search"></i></button>
+                </form>
+            </div>
+            <div class="col-xl-4 col-lg-5">
+                <div class="user-panel">
+                    <div class="up-item">
+                    {% if user.is_authenticated %}
+                        <a href="#" title="Ver perfil de usuario">
+                            <i class="fas fa-user"></i>
+                            {{user.username}} &nbsp;
+                        </a>
+                        <a href="{% url 'users:logout' %}" title="Cerrar sesión">
+                            <i class="fas fa-sign-out-alt"></i>
+                                    Salir
+                        </a> &nbsp;
+                    {% else %}
+                    </div>
+                    <div class="up-item">
+                        <i class="flaticon-profile"></i>
+                        <a href="{% url 'users:login' %}">Iniciar Sesión</a> o <a href="{% url 'users:registro' %}">Crear Cuenta</a>
+                    </div>
+                    {% endif %}
+                        
+                    
+                    <div class="up-item">
+                        <div class="shopping-card">
+                            <i class="flaticon-bag"></i>
+                            {% for c in cart  %}
+                            <span>{{forloop.counter}}</span>
+                            {% endfor %}                                                          
+                        </div>
+                        <a href="{% url 'cart:cart' %}">Carrito</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

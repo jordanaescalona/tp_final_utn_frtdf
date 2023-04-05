@@ -1,0 +1,92 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Estado Ordenes de pedido a proveedor</h1>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" id="dataTable" data-order='[[ 0, "desc" ]]' width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Catálogo</th>
+                            <th>Proveedor</th>
+                            <th>Total</th>
+                            <th>Recibido</th>
+                            <th>Envío</th>
+                            <th>Total + Envío</th>
+                            <th class="all">Opciones</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+                
+                
+                    
+                    {% for item in object_list  %}
+
+                    
+                    {% if not item.recibido %}
+                        
+                        <tr class="bg-danger text-white">
+                            <td>{{item.id}}</td>
+                            <td>{{item.fecha_pedido}}</td>
+                            <td>{{item.catalogo}}</td>
+                            <td>{{item.catalogo.proveedor.nombre}}</td>
+                            <td>{{item.total}}</td>
+                            
+                            <td>{{item.recibido|yesno:"Si,No"}}</td>
+                            <td>{{item.envio}}</td>
+                            <td>{{item.pagar}}</td>
+                            <td>
+                                
+                                        <a href="{% url 'compras:pedido_pendiente' item.id %}" class="btn btn-warning btn-circle" role="button" title="Ver información completa/Editar"> 
+                                            <i class="far fa-edit"></i> 
+                                        </a>
+                                        
+                                        
+                            </td>
+
+                        </tr>
+                        {% endif %}
+                    {% endfor %}  
+                    {% for item in object_list  %}
+
+                    
+                    {% if item.recibido %}
+                        
+                        <tr class="bg-success text-white">
+                            <td>{{item.id}}</td>
+                            <td>{{item.fecha_pedido}}</td>
+                            <td>{{item.catalogo}}</td>
+                            <td>{{item.catalogo.proveedor.nombre}}</td>
+                            <td>{{item.total}}</td>
+                            
+                            <td>{{item.recibido|yesno:"Si,No"}}</td>
+                            <td>{{item.envio}}</td>
+                            <td>{{item.pagar}}</td>
+                            <td>
+                                
+                                        <a href="{% url 'compras:pedido_pendiente' item.id %}" class="btn btn-warning btn-circle" role="button" title="Ver información completa/Editar"> 
+                                            <i class="far fa-edit"></i> 
+                                        </a>
+                                        
+                                        
+                            </td>
+
+                        </tr>
+                        {% endif %}
+                    {% endfor %}    
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+    

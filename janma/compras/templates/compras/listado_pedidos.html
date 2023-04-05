@@ -1,0 +1,122 @@
+{% extends 'administracion/base/base.html' %}
+
+
+{% block content %}
+    
+    <!-- Page Heading -->
+    <h1 class="h3 mb-2 text-gray-800">Listado de orden de pedidos</h1>
+    
+    <!-- DataTales Example -->
+    <div class="card shadow mb-4">
+        <div class="card-header py-3">
+            <a href="{% url 'compras:nuevo_pedido' %}" class="m-0 font-weight-bold text-primary"><i class="fas fa-plus-square"></i> Agregar nueva orden de pedido</a>
+        </div>
+        <div class="card-body">
+            <div class="table-responsive">
+                <table class="table table-bordered" data-order='[[ 0, "desc" ]]' id="dataTable" width="100%" cellspacing="0">
+                    <thead>
+                        <tr>
+                            <th>ID</th>
+                            <th>Fecha</th>
+                            <th>Catálogo</th>
+                            <th>Proveedor</th>
+                            <th>Total</th>
+                            <th>Recibido</th>
+                            <th>Envío</th>
+                            <th>Total + Envío</th>
+                            
+                            <th class="all">Opciones</th>
+                        </tr>
+                    </thead>                
+                    <tbody>
+
+                    {% for item in object_list  %}
+                        <tr>
+                            <td>{{item.id}}</td>
+                            <td>{{item.fecha_pedido}}</td>
+                            <td>{{item.catalogo}}</td>
+                            <td>{{item.catalogo.proveedor.nombre}}</td>
+                            <td>{{item.total}}</td>
+                            
+                            <td>{{item.recibido|yesno:"Si,No"}}</td>
+                            <td>{{item.envio}}</td>
+                            <td>{{item.pagar}}</td>
+                            <td>
+                                
+                                        <a href="{% url 'compras:pedido_editar' item.pk %}" class="btn btn-warning btn-circle my-1"  title="Editar datos de pedido"> 
+                                            <i class="far fa-edit"></i> 
+                                        </a>
+                                        <a href="{% url 'compras:nuevo_pedido_edit' item.id %}" class="btn btn-primary btn-circle my-1" title="Editar detalle pedido">
+                                            <i class="fab fa-wpforms"></i>
+                                        </a>
+                                        <button type="button" onclick="eliminar('{{item.pk}}')" class="btn btn-danger btn-circle my-1"  title="Eliminar"> 
+                                            <i class="far fa-trash-alt"></i> 
+                                        </button>
+                                       
+                                        <a  href="{% url 'compras:pdf_pedido' item.pk %}" target="_blank" class="btn btn-info btn-circle my-1" title="Pdf">
+                                            <i class="far fa-file-pdf"></i>
+                                        </a>
+                                        <a href="{% url 'correo:send' item.id %}" class="btn btn-success btn-circle" title="Enviar pedido por correo">
+                                            <i class="fas fa-at" ></i>
+                                        </a>
+                                        
+                            </td>
+
+                        </tr>
+                    {% endfor %}   
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock content %}
+
+
+{% block js %}
+<script>
+    function eliminar(pk){  
+        $.confirm({
+            theme:"modern",
+            type:'red',
+            title: "Eliminar Orden de pedido",
+            content: 'url:/compras/pedido/delete/' + pk,
+            onContentReady: function () {
+                var self = this;
+                
+            },
+            buttons:{
+                borrar:{
+                    text:"Eliminar",
+                    btnClass:"btn btn-danger",
+                    action: function(){
+                                                    
+                        var data = {"pk":pk};
+                        console.log(data);
+                        var token = '{{csrf_token}}';
+                        $.ajax({
+                            headers: { "X-CSRFToken": token },
+                            type:"POST",
+                            data:data,
+                            url: '/compras/pedido/delete/' + pk,
+                            success: function(r){
+                                console.log(r);
+                                if(r==="ok"){
+                                    location.reload(true);
+                                }else{
+                                    mensaje(r,'red');
+                                }
+                            },
+                            error: function(a,b,c){
+                                mensaje(c);
+                            }
+                        });
+                    }
+                    },
+                cancelar: function(){}
+                }
+        });
+    }
+</script>
+{% endblock js %}
+    
+    

@@ -1,0 +1,32 @@
+{% extends 'administracion/base/base.html' %}
+
+{% block content %}
+<h3>{{title}}</h3>
+<hr>
+<form method="post">
+    {% csrf_token %}
+    <div class="form-group">
+    {{form.fecha_pedido}}
+    </div>
+    <div class="form-group">
+        {{form.as_p}}
+    </div>
+    
+    <hr>  
+    <button type="submit" class="btn btn-primary" >Guardar</button>
+  </form>
+{% endblock content %}
+
+
+{% block js %}
+    <script>
+        $(function () {
+
+            $("#fecha_factura").datetimepicker({
+                format: 'Y-m-d',
+                timepicker:false
+            });
+        });
+    </script>
+{% endblock js %}
+    
